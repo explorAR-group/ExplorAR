@@ -17,7 +17,7 @@ Reference [Establishing Norms](https://docs.google.com/document/d/1qquhoredhOu-D
 ## Pull Requests
 
 - NAMING CONVENTIONS:
-  - Branch Names/ Git commit: RB to add link
+  - Commit to Semantic Branch Names/Git-Commit Messages - http://karma-runner.github.io/0.10/dev/git-commit-msg.html
 - Approval of Pull request:
   - Approval of Pulls done by at least one person in the other coding pair
   - Make sure listing and formatting is aligned across the team
