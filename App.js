@@ -31,6 +31,7 @@ var InitialARScene = require("./js/HelloWorldSceneAR");
 
 var UNSET = "UNSET";
 var AR_NAVIGATOR_TYPE = "AR";
+var LOGIN = "LOGIN";
 
 // This determines which type of experience to launch in, or UNSET, if the user should
 // be presented with a choice of AR or VR. By default, we offer the user a choice.
@@ -59,6 +60,8 @@ export default class ViroSample extends Component {
       return this._getExperienceSelector();
     } else if (this.state.navigatorType == AR_NAVIGATOR_TYPE) {
       return this._getARNavigator();
+    } else if (this.state.navigatorType == LOGIN) {
+      return this._getLoginNavigator();
     }
   }
 
@@ -67,19 +70,22 @@ export default class ViroSample extends Component {
     return (
       <View style={localStyles.outer}>
         <View style={localStyles.inner}>
-          <AuthForm />
-        </View>
-        <View style={localStyles.inner}>
           <Text style={localStyles.titleText}>
             Choose your desired experience:
           </Text>
-
           <TouchableHighlight
             style={localStyles.buttons}
             onPress={this._getExperienceButtonOnPress(AR_NAVIGATOR_TYPE)}
             underlayColor={"#68a0ff"}
           >
             <Text style={localStyles.buttonText}>AR</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            style={localStyles.buttons}
+            onPress={this._getExperienceButtonOnPress(LOGIN)}
+            underlayColor={"#68a0ff"}
+          >
+            <Text style={localStyles.buttonText}>LOGIN</Text>
           </TouchableHighlight>
         </View>
       </View>
@@ -94,6 +100,11 @@ export default class ViroSample extends Component {
         initialScene={{ scene: InitialARScene }}
       />
     );
+  }
+
+  // Returns the user login page
+  _getLoginNavigator() {
+    return <AuthForm />;
   }
 
   // This function returns an anonymous/lambda function to be used
