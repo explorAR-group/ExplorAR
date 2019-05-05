@@ -1,41 +1,35 @@
-import React, { Component } from "react";
-// import {
-//   FormLabel,
-//   FormInput,
-//   FormValidationMessage
-// } from "react-native-elements";
-// import { connect } from "react-redux";
-// import { auth } from "../store";
-// import { ScrollView } from "react-native-gesture-handler";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { auth } from '../store/users.js';
 import {
   View,
   TextInput,
   StyleSheet,
   Text,
   TouchableOpacity
-} from "react-native";
-// import Icon from "react-native-vector-icons/FontAwesome5";
+} from 'react-native';
 
-export default class AuthForm extends Component {
+export class AuthForm extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      username: "",
-      password: "",
-      formName: ""
+      username: 'Username',
+      password: 'Password',
+      formName: 'login'
     };
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount() {
-    this.setState({
-      username: "Username",
-      password: "Password",
-      formName: "login"
-    });
+  handleSubmit() {
+    const formName = 'login';
+    const email = this.state.username;
+    const password = this.state.password;
+    this.props.handleSubmitThunk(email, password, formName);
   }
 
   render() {
+    console.warn('this.props.handleSubmitThunk', this.props.handleSubmitThunk);
     return (
       <View style={styles.loginWrapper}>
         <TextInput
@@ -54,14 +48,7 @@ export default class AuthForm extends Component {
         <TouchableOpacity
           style={styles.loginButton}
           onPress={() => {
-            console.log(
-              "username: ",
-              this.state.username,
-              "password: ",
-              this.state.password,
-              "formName: ",
-              this.state.formName
-            );
+            this.handleSubmit();
           }}
         >
           <Text style={styles.loginButtonText}>Login</Text>
@@ -71,29 +58,64 @@ export default class AuthForm extends Component {
   }
 }
 
+const mapLogin = state => {
+  return {
+    name: 'login',
+    displayName: 'Login',
+    error: state.user.error
+  };
+};
+
+const mapSignup = state => {
+  return {
+    name: 'signup',
+    displayName: 'Sign Up',
+    error: state.user.error
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleSubmitThunk: function(email, password, formName) {
+      dispatch(auth(email, password, formName));
+    }
+  };
+};
+
+export const Login = connect(
+  mapLogin,
+  mapDispatchToProps
+)(AuthForm);
+
+export const Signup = connect(
+  mapSignup,
+  mapDispatchToProps
+)(AuthForm);
+
 const styles = StyleSheet.create({
   loginWrapper: {
     flex: 1,
-    justifyContent: "center",
-    alignContent: "center",
+    justifyContent: 'center',
+    alignContent: 'center',
     paddingLeft: 20,
     paddingRight: 20
   },
   loginInput: {
-    fontStyle: "italic",
+    fontStyle: 'italic',
+    color: 'grey',
     marginBottom: 10,
     height: 40,
     paddingLeft: 20,
     paddingRight: 20,
-    borderColor: "#eeeeee",
+    borderColor: '#eeeeee',
     borderWidth: 1
   },
   loginButton: {
-    alignItems: "center",
-    backgroundColor: "#6e6e6e",
+    alignItems: 'center',
+    backgroundColor: '#6e6e6e',
     padding: 10
   },
   loginButtonText: {
-    color: "#ffffff"
+    color: '#ffffff'
   }
 });
