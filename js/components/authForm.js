@@ -1,48 +1,44 @@
-import React, { Component } from "react";
-// import {
-//   FormLabel,
-//   FormInput,
-//   FormValidationMessage
-// } from "react-native-elements";
-// import { connect } from "react-redux";
-// import { auth } from "../store";
-// import { ScrollView } from "react-native-gesture-handler";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { auth } from '../store/users.js';
+
 import {
   View,
   TextInput,
   StyleSheet,
   Text,
   TouchableOpacity
-} from "react-native";
-// import Icon from "react-native-vector-icons/FontAwesome5";
+} from 'react-native';
 
-export default class AuthForm extends Component {
+export class AuthForm extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      username: "",
-      password: "",
-      formName: ""
+      email: 'email',
+      password: 'Password'
     };
+    this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
   }
 
-  componentDidMount() {
-    this.setState({
-      username: "Username",
-      password: "Password",
-      formName: "login"
-    });
+  handleLoginSubmit() {
+    const email = this.state.email;
+    const password = this.state.password;
+    this.props.handleLoginSubmitThunk(email, password);
   }
 
   render() {
+    console.warn(
+      'this.props.handleLoginSubmitThunk',
+      this.props.handleLoginSubmitThunk
+    );
     return (
       <View style={styles.loginWrapper}>
         <TextInput
           style={styles.loginInput}
-          placeholder={this.state.username}
+          placeholder={this.state.email}
           placeholderTextColor="#6e6e6e"
-          onChangeText={username => this.setState({ username })}
+          onChangeText={email => this.setState({ email })}
         />
         <TextInput
           style={styles.loginInput}
@@ -54,14 +50,7 @@ export default class AuthForm extends Component {
         <TouchableOpacity
           style={styles.loginButton}
           onPress={() => {
-            console.log(
-              "username: ",
-              this.state.username,
-              "password: ",
-              this.state.password,
-              "formName: ",
-              this.state.formName
-            );
+            this.handleLoginSubmit();
           }}
         >
           <Text style={styles.loginButtonText}>Login</Text>
@@ -71,29 +60,51 @@ export default class AuthForm extends Component {
   }
 }
 
+const mapLogin = state => {
+  return {
+    name: 'login',
+    displayName: 'Login',
+    error: state.user.error
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleLoginSubmitThunk: function(email, password) {
+      dispatch(auth(email, password, 'login'));
+    }
+  };
+};
+
+export default connect(
+  mapLogin,
+  mapDispatchToProps
+)(AuthForm);
+
 const styles = StyleSheet.create({
   loginWrapper: {
     flex: 1,
-    justifyContent: "center",
-    alignContent: "center",
+    justifyContent: 'center',
+    alignContent: 'center',
     paddingLeft: 20,
     paddingRight: 20
   },
   loginInput: {
-    fontStyle: "italic",
+    fontStyle: 'italic',
+    color: 'grey',
     marginBottom: 10,
     height: 40,
     paddingLeft: 20,
     paddingRight: 20,
-    borderColor: "#eeeeee",
+    borderColor: '#eeeeee',
     borderWidth: 1
   },
   loginButton: {
-    alignItems: "center",
-    backgroundColor: "#6e6e6e",
+    alignItems: 'center',
+    backgroundColor: '#6e6e6e',
     padding: 10
   },
   loginButtonText: {
-    color: "#ffffff"
+    color: '#ffffff'
   }
 });

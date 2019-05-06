@@ -43,16 +43,16 @@
 //  */
 // const mapLogin = state => {
 //   return {
-//     name: "login",
-//     displayName: "Login",
+//     name: 'login',
+//     displayName: 'Login',
 //     error: state.user.error
 //   };
 // };
 
 // const mapSignup = state => {
 //   return {
-//     name: "signup",
-//     displayName: "Sign Up",
+//     name: 'signup',
+//     displayName: 'Sign Up',
 //     error: state.user.error
 //   };
 // };
