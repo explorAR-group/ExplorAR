@@ -9,7 +9,7 @@ import {
   PixelRatio,
   TouchableHighlight
 } from 'react-native';
-import { AuthForm } from './js/components/authForm';
+import AuthForm from './js/components/authForm';
 import { ViroARSceneNavigator } from 'react-viro';
 
 var sharedProps = {
@@ -50,18 +50,18 @@ export default class ViroSample extends Component {
       return this._getARNavigator();
     } else if (this.state.navigatorType == LOGIN) {
       // Returns the user login page
-      return <AuthForm />;
+      return (
+        <Provider store={store}>
+          <AuthForm />
+        </Provider>
+      );
     }
   }
 
   // Replace this function with the contents of _getVRNavigator() or _getARNavigator()
   // if you are building a specific type of experience.?????
   render() {
-    return (
-      <Provider store={store}>
-        <View style={localStyles.outer}>{this.firstScreen()}</View>
-      </Provider>
-    );
+    return this.firstScreen();
   }
 
   // Presents the user with a start AR experience button

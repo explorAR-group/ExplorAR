@@ -31,8 +31,12 @@ export const me = () => async dispatch => {
 
 export const auth = (email, password, method) => async dispatch => {
   let res;
+  console.warn('inside auth thunk!');
   try {
-    res = await axios.post(`/auth/${method}`, { email, password });
+    res = await axios.post(`http://192.168.3.105:8080/auth/${method}`, {
+      email,
+      password
+    });
   } catch (authError) {
     return dispatch(setUser({ error: authError }));
   }

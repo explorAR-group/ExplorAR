@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { auth } from '../store/users.js';
+
 import {
   View,
   TextInput,
@@ -14,29 +15,30 @@ export class AuthForm extends Component {
     super(props);
 
     this.state = {
-      username: 'Username',
-      password: 'Password',
-      formName: 'login'
+      email: 'email',
+      password: 'Password'
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
   }
 
-  handleSubmit() {
-    const formName = 'login';
-    const email = this.state.username;
+  handleLoginSubmit() {
+    const email = this.state.email;
     const password = this.state.password;
-    this.props.handleSubmitThunk(email, password, formName);
+    this.props.handleLoginSubmitThunk(email, password);
   }
 
   render() {
-    console.warn('this.props.handleSubmitThunk', this.props.handleSubmitThunk);
+    console.warn(
+      'this.props.handleLoginSubmitThunk',
+      this.props.handleLoginSubmitThunk
+    );
     return (
       <View style={styles.loginWrapper}>
         <TextInput
           style={styles.loginInput}
-          placeholder={this.state.username}
+          placeholder={this.state.email}
           placeholderTextColor="#6e6e6e"
-          onChangeText={username => this.setState({ username })}
+          onChangeText={email => this.setState({ email })}
         />
         <TextInput
           style={styles.loginInput}
@@ -48,7 +50,7 @@ export class AuthForm extends Component {
         <TouchableOpacity
           style={styles.loginButton}
           onPress={() => {
-            this.handleSubmit();
+            this.handleLoginSubmit();
           }}
         >
           <Text style={styles.loginButtonText}>Login</Text>
@@ -66,29 +68,16 @@ const mapLogin = state => {
   };
 };
 
-const mapSignup = state => {
-  return {
-    name: 'signup',
-    displayName: 'Sign Up',
-    error: state.user.error
-  };
-};
-
 const mapDispatchToProps = dispatch => {
   return {
-    handleSubmitThunk: function(email, password, formName) {
-      dispatch(auth(email, password, formName));
+    handleLoginSubmitThunk: function(email, password) {
+      dispatch(auth(email, password, 'login'));
     }
   };
 };
 
-export const Login = connect(
+export default connect(
   mapLogin,
-  mapDispatchToProps
-)(AuthForm);
-
-export const Signup = connect(
-  mapSignup,
   mapDispatchToProps
 )(AuthForm);
 
