@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { auth } from '../store/users.js';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { auth } from "../store/users.js";
 
 import {
   View,
@@ -8,15 +8,15 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity
-} from 'react-native';
+} from "react-native";
 
 export class AuthForm extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      email: 'email',
-      password: 'Password'
+      email: "email",
+      password: "Password"
     };
     this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
   }
@@ -29,7 +29,7 @@ export class AuthForm extends Component {
 
   render() {
     console.warn(
-      'this.props.handleLoginSubmitThunk',
+      "this.props.handleLoginSubmitThunk",
       this.props.handleLoginSubmitThunk
     );
     return (
@@ -62,8 +62,8 @@ export class AuthForm extends Component {
 
 const mapLogin = state => {
   return {
-    name: 'login',
-    displayName: 'Login',
+    name: "login",
+    displayName: "Login",
     error: state.user.error
   };
 };
@@ -71,7 +71,7 @@ const mapLogin = state => {
 const mapDispatchToProps = dispatch => {
   return {
     handleLoginSubmitThunk: function(email, password) {
-      dispatch(auth(email, password, 'login'));
+      dispatch(auth(email, password, "login"));
     }
   };
 };
@@ -84,27 +84,27 @@ export default connect(
 const styles = StyleSheet.create({
   loginWrapper: {
     flex: 1,
-    justifyContent: 'center',
-    alignContent: 'center',
+    justifyContent: "center",
+    alignContent: "center",
     paddingLeft: 20,
     paddingRight: 20
   },
   loginInput: {
-    fontStyle: 'italic',
-    color: 'grey',
+    fontStyle: "italic",
+    color: "grey",
     marginBottom: 10,
     height: 40,
     paddingLeft: 20,
     paddingRight: 20,
-    borderColor: '#eeeeee',
+    borderColor: "#eeeeee",
     borderWidth: 1
   },
   loginButton: {
-    alignItems: 'center',
-    backgroundColor: '#6e6e6e',
+    alignItems: "center",
+    backgroundColor: "#6e6e6e",
     padding: 10
   },
   loginButtonText: {
-    color: '#ffffff'
+    color: "#ffffff"
   }
 });
