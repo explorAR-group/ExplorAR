@@ -22,16 +22,16 @@ export default class HelloWorldSceneAR extends Component {
   }
 
   async componentDidMount() {
-    let x = '5';
-
     const { data } = await axios.get(
-      'https://api.binance.com/api/v1/depth?symbol=LTCBTC'
+      'http://172.16.23.29:8080/api/pointsOfInterest'
     );
-
-    const newData = { ask: data.asks[0][0], bid: data.bids[0][0] };
-    let newTest = String(newData.ask);
-    console.log(newData, '!!!!!!!!!!!!!!!!');
+    console.warn(data, 'data');
+    let newTest = String(data[0].name);
     this.setState({ text: newTest });
+  }
+
+  componentWillUnmount() {
+    navigator.geolocation.clearWatch(this.watchId);
   }
 
   render() {

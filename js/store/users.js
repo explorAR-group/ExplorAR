@@ -3,7 +3,7 @@ import axios from 'axios';
 /**
  * ACTION TYPES
  */
-const GET_USER = 'GET_USER';
+const SET_USER = 'SET_USER';
 const REMOVE_USER = 'REMOVE_USER';
 
 /**
@@ -14,7 +14,7 @@ const defaultUser = {};
 /**
  * ACTION CREATORS
  */
-const setUser = user => ({ type: GET_USER, user });
+const setUser = user => ({ type: SET_USER, user });
 const removeUser = () => ({ type: REMOVE_USER });
 
 /**
@@ -33,7 +33,7 @@ export const auth = (email, password, method) => async dispatch => {
   let res;
   console.warn('inside auth thunk!');
   try {
-    res = await axios.post(`http://192.168.3.105:8080/auth/${method}`, {
+    res = await axios.post(`http://172.16.23.29:8080/auth/${method}`, {
       email,
       password
     });
@@ -41,9 +41,10 @@ export const auth = (email, password, method) => async dispatch => {
     return dispatch(setUser({ error: authError }));
   }
 
+  console.warn(res.data, 'res.data');
   try {
     dispatch(setUser(res.data));
-    history.push('/home');
+    console.warn('defaultUser', defaultUser);
   } catch (dispatchOrHistoryErr) {
     console.error(dispatchOrHistoryErr);
   }
@@ -63,11 +64,15 @@ export const logout = () => async dispatch => {
  * REDUCER
  */
 export default function(state = defaultUser, action) {
+  let stateCopy = { ...state };
   switch (action.type) {
-    case GET_USER:
-      return action.user;
+    case SET_USER:
+      stateCopy = action.user;
+      console.warn('state copy', stateCopy);
+      return stateCopy;
     case REMOVE_USER:
-      return defaultUser;
+      stateCopy = {};
+      return stateCopy;
     default:
       return state;
   }

@@ -9,7 +9,7 @@ import {
   PixelRatio,
   TouchableHighlight
 } from 'react-native';
-import AuthForm from './js/components/authForm';
+import PointOfInterest from './js/components/PointOfInterest.js';
 import { ViroARSceneNavigator } from 'react-viro';
 
 var sharedProps = {
@@ -17,7 +17,7 @@ var sharedProps = {
 };
 
 // Sets the default scene you want for AR and VR
-var InitialARScene = require('./js/HelloWorldSceneAR');
+var InitialARScene = require('./js/components/PointOfInterest.js');
 
 var UNSET = 'UNSET';
 var AR_NAVIGATOR_TYPE = 'AR';
@@ -52,7 +52,7 @@ export default class ViroSample extends Component {
       // Returns the user login page
       return (
         <Provider store={store}>
-          <AuthForm />
+          <PointOfInterest />
         </Provider>
       );
     }

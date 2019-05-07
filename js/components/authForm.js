@@ -28,10 +28,6 @@ export class AuthForm extends Component {
   }
 
   render() {
-    console.warn(
-      'this.props.handleLoginSubmitThunk',
-      this.props.handleLoginSubmitThunk
-    );
     return (
       <View style={styles.loginWrapper}>
         <TextInput
@@ -64,7 +60,8 @@ const mapLogin = state => {
   return {
     name: 'login',
     displayName: 'Login',
-    error: state.user.error
+    error: state.user.error,
+    user: state.user
   };
 };
 

@@ -1,13 +1,10 @@
 'use strict';
-
 import React, { Component } from 'react';
-
 import { StyleSheet } from 'react-native';
-
 import { ViroARScene, ViroText } from 'react-viro';
-import pointOfInterest from './PointOfInterest';
+import axios from 'axios';
 
-export default class HelloWorldSceneAR extends Component {
+export default class PointOfInterest extends Component {
   constructor() {
     super();
 
@@ -24,7 +21,8 @@ export default class HelloWorldSceneAR extends Component {
       westPointZ: 0,
       latitude: 0,
       longitude: 0,
-      error: null
+      error: null,
+      POIs: []
     };
 
     // bind 'this' to functions
@@ -33,7 +31,8 @@ export default class HelloWorldSceneAR extends Component {
     this._transformPointToAR = this._transformPointToAR.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    // get location info for device
     navigator.geolocation.getCurrentPosition(
       position => {
         this.setState({
@@ -45,41 +44,62 @@ export default class HelloWorldSceneAR extends Component {
       error => this.setState({ error: error.message }),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
+
+    // get API info from backend for POIs
+    const { data } = await axios.get(
+      'http://172.16.23.29:8080/api/pointsOfInterest'
+    );
+    this.setState({ POIs: data });
+
+    // translate lat long to local and set state
+
+    // data.map(poi => {
+    //   this.setState({
+    //     [poi.id]: poi
+    //   });
+    // });
+    // var northPoint = this._transformPointToAR(40.705247, -74.009426);
   }
 
-  // componentDidMount() {
-  //   this.watchId = navigator.geolocation.watchPosition(
-  //     position => {
-  //       this.setState({
-  //         latitude: position.coords.latitude,
-  //         longitude: position.coords.longitude,
-  //         error: null
-  //       });
-  //     },
-  //     error => this.setState({ error: error.message }),
-  //     {
-  //       enableHighAccuracy: true,
-  //       timeout: 2000,
-  //       maximumAge: 0,
-  //       distanceFilter: 1
-  //     }
-  //   );
-  // }
-
-  // componentWillUnmount() {
-  //   navigator.geolocation.clearWatch(this.watchId);
-  // }
-
   render() {
+    console.warn(this.state.POIs, 'this.state.POIs');
+
     return (
       <ViroARScene onTrackingInitialized={this._onInitialized}>
-        <ViroText
-          text={this.state.text}
-          scale={[0.2, 2, 0.2]}
-          position={[0, -2, -5]}
-          style={styles.helloWorldTextStyle}
-        />
-        <ViroText
+        {this.state.POIs.map(poi => {
+          return (
+            <ViroText
+              text={String(poi.name)}
+              scale={[3, 3, 3]}
+              position={(() => {
+                let point = this._transformPointToAR(
+                  poi.latitude,
+                  poi.longitude
+                );
+                console.warn(typeof point.x, 'typeof pointx');
+                console.warn(point.x, 'pointx');
+                console.warn(point.z, 'pointz');
+
+                return [point.x, 0, point.z];
+              })()}
+              style={styles.helloWorldTextStyle}
+            />
+          );
+        })}
+
+        {/* {this.state.POIs.map(poi => {
+          return (
+            <ViroText
+              text={String(poi.name)}
+              scale={[0.5, 0.5, 0.5]}
+              position={(() => {
+                return [0, 0, poi.id * -1.5];
+              })()}
+              style={styles.helloWorldTextStyle}
+            />
+          );
+        })} */}
+        {/* <ViroText
           text="N st)"
           scale={[3, 3, 3]}
           transformBehaviors={['billboard']}
@@ -106,7 +126,7 @@ export default class HelloWorldSceneAR extends Component {
           transformBehaviors={['billboard']}
           position={[this.state.eastPointX, 0, this.state.eastPointZ]}
           style={styles.helloWorldTextStyle}
-        />
+        /> */}
         {/* <ViroText
           text={this.state.latitude.toString()}
           scale={[3, 3, 3]}
@@ -126,29 +146,21 @@ export default class HelloWorldSceneAR extends Component {
   }
 
   _onInitialized() {
-    var northPoint = this._transformPointToAR(40.705247, -74.009426);
-    var eastPoint = this._transformPointToAR(40.704701, -74.008999);
-    var westPoint = this._transformPointToAR(40.776831, -73.962008);
-    var southPoint = this._transformPointToAR(40.704805, -74.008927);
-    console.log(
-      'obj north final x:' + northPoint.x + 'final z:' + northPoint.z
-    );
-    console.log(
-      'obj south final x:' + southPoint.x + 'final z:' + southPoint.z
-    );
-    console.log('obj east point x' + eastPoint.x + 'final z' + eastPoint.z);
-    console.log('obj west point x' + westPoint.x + 'final z' + westPoint.z);
-    this.setState({
-      northPointX: northPoint.x,
-      northPointZ: northPoint.z,
-      southPointX: southPoint.x,
-      southPointZ: southPoint.z,
-      eastPointX: eastPoint.x,
-      eastPointZ: eastPoint.z,
-      westPointX: westPoint.x,
-      westPointZ: westPoint.z,
-      text: 'AR Init called.'
-    });
+    // var northPoint = this._transformPointToAR(40.705247, -74.009426);
+    // var eastPoint = this._transformPointToAR(40.704701, -74.008999);
+    // var westPoint = this._transformPointToAR(40.776831, -73.962008);
+    // var southPoint = this._transformPointToAR(40.704805, -74.008927);
+    // this.setState({
+    //   northPointX: northPoint.x,
+    //   northPointZ: northPoint.z,
+    //   southPointX: southPoint.x,
+    //   southPointZ: southPoint.z,
+    //   eastPointX: eastPoint.x,
+    //   eastPointZ: eastPoint.z,
+    //   westPointX: westPoint.x,
+    //   westPointZ: westPoint.z,
+    //   text: 'AR Init called.'
+    // });
   }
 
   _latLongToMerc(lat_deg, lon_deg) {
@@ -162,11 +174,11 @@ export default class HelloWorldSceneAR extends Component {
 
   _transformPointToAR(lat, long) {
     var objPoint = this._latLongToMerc(lat, long);
-    var devicePoint = this._latLongToMerc(
-      this.state.latitude,
-      this.state.longitude
-    );
-    // var devicePoint = this._latLongToMerc(40.704986, -74.009029);
+    // var devicePoint = this._latLongToMerc(
+    //   this.state.latitude,
+    //   this.state.longitude
+    // );
+    var devicePoint = this._latLongToMerc(40.705107, -74.00916);
     console.log('objPointZ: ' + objPoint.y + ', objPointX: ' + objPoint.x);
     // latitude(north,south) maps to the z axis in AR
     // longitude(east, west) maps to the x axis in AR
@@ -187,4 +199,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = HelloWorldSceneAR;
+module.exports = PointOfInterest;
