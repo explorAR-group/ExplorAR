@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
-import { ViroARScene, ViroText, ViroConstants } from 'react-viro';
+import { ViroARScene, ViroText, ViroConstants } from "react-viro";
 
-import axios from 'axios';
+import axios from "axios";
 
 export default class HelloWorldSceneAR extends Component {
   constructor() {
@@ -14,7 +14,7 @@ export default class HelloWorldSceneAR extends Component {
 
     // Set initial state here
     this.state = {
-      text: 'Initializing AR...'
+      text: "Initializing AR..."
     };
 
     // bind 'this' to functions
@@ -22,15 +22,15 @@ export default class HelloWorldSceneAR extends Component {
   }
 
   async componentDidMount() {
-    let x = '5';
+    let x = "5";
 
     const { data } = await axios.get(
-      'https://api.binance.com/api/v1/depth?symbol=LTCBTC'
+      "https://api.binance.com/api/v1/depth?symbol=LTCBTC"
     );
 
     const newData = { ask: data.asks[0][0], bid: data.bids[0][0] };
     let newTest = String(newData.ask);
-    console.log(newData, '!!!!!!!!!!!!!!!!');
+    console.log(newData, "!!!!!!!!!!!!!!!!");
     this.setState({ text: newTest });
   }
 
@@ -60,11 +60,11 @@ export default class HelloWorldSceneAR extends Component {
 
 var styles = StyleSheet.create({
   helloWorldTextStyle: {
-    fontFamily: 'Arial',
+    fontFamily: "Arial",
     fontSize: 30,
-    color: '#ffffff',
-    textAlignVertical: 'center',
-    textAlign: 'center'
+    color: "#ffffff",
+    textAlignVertical: "center",
+    textAlign: "center"
   }
 });
 
