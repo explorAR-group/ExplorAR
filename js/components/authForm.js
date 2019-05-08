@@ -15,8 +15,8 @@ export class AuthForm extends Component {
     super(props);
 
     this.state = {
-      email: "email",
-      password: "Password"
+      email: "",
+      password: ""
     };
     this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
   }
@@ -28,29 +28,36 @@ export class AuthForm extends Component {
   }
 
   render() {
-    console.warn(
-      "this.props.handleLoginSubmitThunk",
-      this.props.handleLoginSubmitThunk
-    );
+    // console.warn(
+    //   "this.props.handleLoginSubmitThunk",
+    //   this.props.handleLoginSubmitThunk
+    // );
     return (
       <View style={styles.loginWrapper}>
         <TextInput
           style={styles.loginInput}
-          placeholder={this.state.email}
+          placeholder="Email"
           placeholderTextColor="#6e6e6e"
+          autoCapitalize="none"
+          value={this.state.email}
           onChangeText={email => this.setState({ email })}
         />
         <TextInput
           style={styles.loginInput}
           secureTextEntry={true}
-          placeholder={this.state.password}
+          placeholder="Password"
           placeholderTextColor="#6e6e6e"
+          autoCapitalize="none"
+          value={this.state.password}
           onChangeText={password => this.setState({ password })}
         />
         <TouchableOpacity
           style={styles.loginButton}
+          // onPress={() => {
+          //   this.handleLoginSubmit();
+          // }}
           onPress={() => {
-            this.handleLoginSubmit();
+            this.props.switchToAR();
           }}
         >
           <Text style={styles.loginButtonText}>Login</Text>
