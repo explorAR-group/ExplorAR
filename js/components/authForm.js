@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { auth } from "../store/users.js";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 import {
   View,
@@ -34,6 +35,11 @@ export class AuthForm extends Component {
     // );
     return (
       <View style={styles.loginWrapper}>
+        <Text style={styles.loginHeader}>
+          Expl
+          <Icon name="globe-americas" size={20} color="#0000eb" />r
+          <Text style={{ fontStyle: "italic" }}>AR</Text>
+        </Text>
         <TextInput
           style={styles.loginInput}
           placeholder="Email"
@@ -95,6 +101,12 @@ const styles = StyleSheet.create({
     alignContent: "center",
     paddingLeft: 20,
     paddingRight: 20
+  },
+  loginHeader: {
+    fontSize: 35,
+    color: "#3d3d3d",
+    textAlign: "center",
+    margin: 10
   },
   loginInput: {
     fontStyle: "italic",
