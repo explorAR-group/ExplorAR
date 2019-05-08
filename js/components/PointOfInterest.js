@@ -1,8 +1,14 @@
-'use strict';
-import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { ViroARScene, ViroText, ViroImage } from 'react-viro';
-import axios from 'axios';
+"use strict";
+import React, { Component } from "react";
+import { StyleSheet, View } from "react-native";
+import {
+  ViroARScene,
+  ViroText,
+  ViroImage,
+  Viro3DObject,
+  ViroAmbientLight
+} from "react-viro";
+import axios from "axios";
 
 export default class PointOfInterest extends Component {
   constructor() {
@@ -10,7 +16,7 @@ export default class PointOfInterest extends Component {
 
     // Set initial state here
     this.state = {
-      text: 'Initializing AR...',
+      text: "Initializing AR...",
       error: null,
       POIs: []
     };
@@ -22,31 +28,46 @@ export default class PointOfInterest extends Component {
   }
 
   async componentDidMount() {
-    // get location info for device
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null
-        });
-      },
-      error => this.setState({ error: error.message }),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
+    try {
+      // get location info for device
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          this.setState({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            error: null
+          });
+        },
+        error => this.setState({ error: error.message }),
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      );
 
-    // get API info from backend for POIs
-    const { data } = await axios.get(
-      'http://172.16.23.29:8080/api/pointsOfInterest'
-    );
-    this.setState({ POIs: data });
+      // get API info from backend for POIs
+      const { data } = await axios.get(
+        "http://172.16.23.1:8080/api/pointsOfInterest"
+      );
+      this.setState({ POIs: data });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   render() {
-    console.warn(this.state.POIs, 'this.state.POIs');
+    console.warn(this.state.POIs, "this.state.POIs");
 
     return (
       <ViroARScene onTrackingInitialized={this._onInitialized}>
+        <ViroAmbientLight color="#FFFFFF" />
+        <Viro3DObject
+          source={require("../res/bull/13927_Charging_Bull_Statue_of_Wall_Street_v1_L1.obj")}
+          resources={[
+            require("../res/bull/13927_Charging_Bull_Statue_of_Wall_Street_v1_L1.mtl"),
+            require("../res/bull/13927_Charging_Bull_Statue_of_Wall_Street_diff.jpg")
+          ]}
+          position={[0.0, 0.0, -1]}
+          scale={[0.001, 0.001, 0.001]}
+          type="OBJ"
+        />
         {this.state.POIs.map(poi => {
           return (
             <ViroText
@@ -119,7 +140,7 @@ export default class PointOfInterest extends Component {
     //   this.state.longitude
     // );
     var devicePoint = this._latLongToMerc(40.7049444, -74.0091771);
-    console.log('objPointZ: ' + objPoint.y + ', objPointX: ' + objPoint.x);
+    console.log("objPointZ: " + objPoint.y + ", objPointX: " + objPoint.x);
     // latitude(north,south) maps to the z axis in AR
     // longitude(east, west) maps to the x axis in AR
     var objFinalPosZ = objPoint.y - devicePoint.y;
@@ -131,11 +152,11 @@ export default class PointOfInterest extends Component {
 
 var styles = StyleSheet.create({
   helloWorldTextStyle: {
-    fontFamily: 'Arial',
+    fontFamily: "Arial",
     fontSize: 30,
-    color: '#000000',
-    textAlignVertical: 'center',
-    textAlign: 'center'
+    color: "#000000",
+    textAlignVertical: "center",
+    textAlign: "center"
   }
 });
 
