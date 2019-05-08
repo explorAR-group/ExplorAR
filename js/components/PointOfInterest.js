@@ -1,7 +1,7 @@
 'use strict';
 import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
-import { ViroARScene, ViroText } from 'react-viro';
+import { StyleSheet, View } from 'react-native';
+import { ViroARScene, ViroText, ViroImage } from 'react-viro';
 import axios from 'axios';
 
 export default class PointOfInterest extends Component {
@@ -11,16 +11,6 @@ export default class PointOfInterest extends Component {
     // Set initial state here
     this.state = {
       text: 'Initializing AR...',
-      northPointX: 0,
-      northPointZ: 0,
-      southPointX: 0,
-      southPointZ: 0,
-      eastPointX: 0,
-      eastPointZ: 0,
-      westPointX: 0,
-      westPointZ: 0,
-      latitude: 0,
-      longitude: 0,
       error: null,
       POIs: []
     };
@@ -50,15 +40,6 @@ export default class PointOfInterest extends Component {
       'http://172.16.23.29:8080/api/pointsOfInterest'
     );
     this.setState({ POIs: data });
-
-    // translate lat long to local and set state
-
-    // data.map(poi => {
-    //   this.setState({
-    //     [poi.id]: poi
-    //   });
-    // });
-    // var northPoint = this._transformPointToAR(40.705247, -74.009426);
   }
 
   render() {
@@ -69,78 +50,37 @@ export default class PointOfInterest extends Component {
         {this.state.POIs.map(poi => {
           return (
             <ViroText
+              key={poi.id}
               text={String(poi.name)}
+              extrusionDepth={8}
               scale={[3, 3, 3]}
               position={(() => {
                 let point = this._transformPointToAR(
                   poi.latitude,
                   poi.longitude
                 );
-                console.warn(typeof point.x, 'typeof pointx');
-                console.warn(point.x, 'pointx');
-                console.warn(point.z, 'pointz');
-
                 return [point.x, 0, point.z];
               })()}
               style={styles.helloWorldTextStyle}
             />
           );
         })}
-
-        {/* {this.state.POIs.map(poi => {
+        {this.state.POIs.map(poi => {
           return (
-            <ViroText
-              text={String(poi.name)}
-              scale={[0.5, 0.5, 0.5]}
+            <ViroImage
+              key={poi.id}
+              source={{ uri: poi.imageUrl }}
+              scale={[3, 3, 3]}
               position={(() => {
-                return [0, 0, poi.id * -1.5];
+                let point = this._transformPointToAR(
+                  poi.latitude,
+                  poi.longitude
+                );
+                return [point.x + 5, 0, point.z];
               })()}
-              style={styles.helloWorldTextStyle}
             />
           );
-        })} */}
-        {/* <ViroText
-          text="N st)"
-          scale={[3, 3, 3]}
-          transformBehaviors={['billboard']}
-          position={[this.state.northPointX, 0, this.state.northPointZ]}
-          style={styles.helloWorldTextStyle}
-        />
-        <ViroText
-          text="S Lenwich"
-          scale={[3, 3, 3]}
-          transformBehaviors={['billboard']}
-          position={[this.state.southPointX, 0, this.state.southPointZ]}
-          style={styles.helloWorldTextStyle}
-        />
-        <ViroText
-          text="W ValJ"
-          scale={[3, 3, 3]}
-          transformBehaviors={['billboard']}
-          position={[this.state.westPointX, 0, this.state.westPointZ]}
-          style={styles.helloWorldTextStyle}
-        />
-        <ViroText
-          text="E Starbucks"
-          scale={[3, 3, 3]}
-          transformBehaviors={['billboard']}
-          position={[this.state.eastPointX, 0, this.state.eastPointZ]}
-          style={styles.helloWorldTextStyle}
-        /> */}
-        {/* <ViroText
-          text={this.state.latitude.toString()}
-          scale={[3, 3, 3]}
-          transformBehaviors={['billboard']}
-          position={[0, -1, -1]}
-          style={styles.helloWorldTextStyle}
-        />
-        <ViroText
-          text={this.state.longitude.toString()}
-          scale={[3, 3, 3]}
-          transformBehaviors={['billboard']}
-          position={[0, -1, -3]}
-          style={styles.helloWorldTextStyle}
-        /> */}
+        })}
       </ViroARScene>
     );
   }
@@ -178,7 +118,7 @@ export default class PointOfInterest extends Component {
     //   this.state.latitude,
     //   this.state.longitude
     // );
-    var devicePoint = this._latLongToMerc(40.705107, -74.00916);
+    var devicePoint = this._latLongToMerc(40.7049444, -74.0091771);
     console.log('objPointZ: ' + objPoint.y + ', objPointX: ' + objPoint.x);
     // latitude(north,south) maps to the z axis in AR
     // longitude(east, west) maps to the x axis in AR
