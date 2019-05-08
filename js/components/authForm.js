@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { auth } from '../store/users.js';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { auth } from "../store/users.js";
 
 import {
   View,
@@ -8,15 +8,15 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity
-} from 'react-native';
+} from "react-native";
 
 export class AuthForm extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      email: 'email',
-      password: 'Password'
+      email: "",
+      password: ""
     };
     this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
   }
@@ -28,25 +28,36 @@ export class AuthForm extends Component {
   }
 
   render() {
+    // console.warn(
+    //   "this.props.handleLoginSubmitThunk",
+    //   this.props.handleLoginSubmitThunk
+    // );
     return (
       <View style={styles.loginWrapper}>
         <TextInput
           style={styles.loginInput}
-          placeholder={this.state.email}
+          placeholder="Email"
           placeholderTextColor="#6e6e6e"
+          autoCapitalize="none"
+          value={this.state.email}
           onChangeText={email => this.setState({ email })}
         />
         <TextInput
           style={styles.loginInput}
           secureTextEntry={true}
-          placeholder={this.state.password}
+          placeholder="Password"
           placeholderTextColor="#6e6e6e"
+          autoCapitalize="none"
+          value={this.state.password}
           onChangeText={password => this.setState({ password })}
         />
         <TouchableOpacity
           style={styles.loginButton}
+          // onPress={() => {
+          //   this.handleLoginSubmit();
+          // }}
           onPress={() => {
-            this.handleLoginSubmit();
+            this.props.switchToAR();
           }}
         >
           <Text style={styles.loginButtonText}>Login</Text>
@@ -58,17 +69,16 @@ export class AuthForm extends Component {
 
 const mapLogin = state => {
   return {
-    name: 'login',
-    displayName: 'Login',
-    error: state.user.error,
-    user: state.user
+    name: "login",
+    displayName: "Login",
+    error: state.user.error
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     handleLoginSubmitThunk: function(email, password) {
-      dispatch(auth(email, password, 'login'));
+      dispatch(auth(email, password, "login"));
     }
   };
 };
@@ -81,27 +91,27 @@ export default connect(
 const styles = StyleSheet.create({
   loginWrapper: {
     flex: 1,
-    justifyContent: 'center',
-    alignContent: 'center',
+    justifyContent: "center",
+    alignContent: "center",
     paddingLeft: 20,
     paddingRight: 20
   },
   loginInput: {
-    fontStyle: 'italic',
-    color: 'grey',
+    fontStyle: "italic",
+    color: "grey",
     marginBottom: 10,
     height: 40,
     paddingLeft: 20,
     paddingRight: 20,
-    borderColor: '#eeeeee',
+    borderColor: "#eeeeee",
     borderWidth: 1
   },
   loginButton: {
-    alignItems: 'center',
-    backgroundColor: '#6e6e6e',
+    alignItems: "center",
+    backgroundColor: "#6e6e6e",
     padding: 10
   },
   loginButtonText: {
-    color: '#ffffff'
+    color: "#ffffff"
   }
 });
