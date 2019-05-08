@@ -5,7 +5,7 @@ import AuthForm from "./js/components/authForm";
 import { Provider } from "react-redux";
 import store from "./js/store/index";
 
-const InitialARScene = require("./js/HelloWorldSceneAR");
+const InitialARScene = require("./js/components/PointOfInterest.js");
 
 export default class ViroSample extends Component {
   constructor() {
