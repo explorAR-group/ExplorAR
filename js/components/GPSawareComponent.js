@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { ViroARScene, ViroText } from 'react-viro';
+import pointOfInterest from './PointOfInterest';
 
 export default class HelloWorldSceneAR extends Component {
   constructor() {
