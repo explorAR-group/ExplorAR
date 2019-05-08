@@ -12,7 +12,10 @@ export default class PointOfInterest extends Component {
     this.state = {
       text: 'Initializing AR...',
       error: null,
-      POIs: []
+      POIs: [],
+      latitude: 0,
+      longitude: 0,
+      farPOIs: []
     };
 
     // bind 'this' to functions
@@ -40,10 +43,26 @@ export default class PointOfInterest extends Component {
       'http://172.16.23.29:8080/api/pointsOfInterest'
     );
     this.setState({ POIs: data });
+
+    //Creating new set of POIs based on far distance
+    // this.state.POIs.filter(elem => elem.longitude > 300)
+
+    let tempArr = this.state.POIs.map(poi => {
+      let point = this._transformPointToAR(poi.latitude, poi.longitude);
+      poi.x = point.x;
+      poi.z = point.z;
+      return poi;
+    });
+
+    tempArr = tempArr.filter(
+      poi => Math.abs(poi.x) > 140 || Math.abs(poi.z) > 140
+    );
+    console.warn(tempArr, 'NEW ARRRRAYYY');
+    this.setState({ farPOIs: tempArr });
   }
 
   render() {
-    console.warn(this.state.POIs, 'this.state.POIs');
+    // console.warn(this.state.POIs, 'this.state.POIs');
 
     return (
       <ViroARScene onTrackingInitialized={this._onInitialized}>
@@ -65,12 +84,36 @@ export default class PointOfInterest extends Component {
             />
           );
         })}
+        {/* DESCRIPTION */}
+        {this.state.POIs.map(poi => {
+          return (
+            <ViroText
+              key={poi.id}
+              text={String(poi.description)}
+              extrusionDepth={2}
+              height={5}
+              width={2}
+              scale={[3, 3, 3]}
+              textAlignVertical="top"
+              textLineBreakMode="justify"
+              textClipMode="clipToBounds"
+              position={(() => {
+                let point = this._transformPointToAR(
+                  poi.latitude,
+                  poi.longitude
+                );
+                return [point.x - 5, 0, point.z];
+              })()}
+              style={styles.descriptionTextStyle}
+            />
+          );
+        })}
         {this.state.POIs.map(poi => {
           return (
             <ViroImage
               key={poi.id}
               source={{ uri: poi.imageUrl }}
-              scale={[3, 3, 3]}
+              scale={[5, 5, 5]}
               position={(() => {
                 let point = this._transformPointToAR(
                   poi.latitude,
@@ -81,27 +124,47 @@ export default class PointOfInterest extends Component {
             />
           );
         })}
+        {this.state.farPOIs.map(poi => {
+          return (
+            <ViroText
+              key={poi.id}
+              text={String(poi.name)}
+              extrusionDepth={8}
+              scale={[3, 3, 3]}
+              position={(() => {
+                let point = this._transformPointToAR(
+                  poi.latitude,
+                  poi.longitude
+                );
+                return [point.x * 0.05, 0, point.z * 0.05];
+              })()}
+              style={styles.helloWorldTextStyle}
+            />
+          );
+        })}
+        {this.state.farPOIs.map(poi => {
+          return (
+            <ViroText
+              key={poi.id}
+              text="!"
+              extrusionDepth={8}
+              scale={[15, 15, 15]}
+              position={(() => {
+                let point = this._transformPointToAR(
+                  poi.latitude,
+                  poi.longitude
+                );
+                return [point.x * 0.05, 3, point.z * 0.05];
+              })()}
+              style={styles.helloWorldTextStyle}
+            />
+          );
+        })}
       </ViroARScene>
     );
   }
 
-  _onInitialized() {
-    // var northPoint = this._transformPointToAR(40.705247, -74.009426);
-    // var eastPoint = this._transformPointToAR(40.704701, -74.008999);
-    // var westPoint = this._transformPointToAR(40.776831, -73.962008);
-    // var southPoint = this._transformPointToAR(40.704805, -74.008927);
-    // this.setState({
-    //   northPointX: northPoint.x,
-    //   northPointZ: northPoint.z,
-    //   southPointX: southPoint.x,
-    //   southPointZ: southPoint.z,
-    //   eastPointX: eastPoint.x,
-    //   eastPointZ: eastPoint.z,
-    //   westPointX: westPoint.x,
-    //   westPointZ: westPoint.z,
-    //   text: 'AR Init called.'
-    // });
-  }
+  _onInitialized() {}
 
   _latLongToMerc(lat_deg, lon_deg) {
     var lon_rad = (lon_deg / 180.0) * Math.PI;
@@ -119,7 +182,6 @@ export default class PointOfInterest extends Component {
     //   this.state.longitude
     // );
     var devicePoint = this._latLongToMerc(40.7049444, -74.0091771);
-    console.log('objPointZ: ' + objPoint.y + ', objPointX: ' + objPoint.x);
     // latitude(north,south) maps to the z axis in AR
     // longitude(east, west) maps to the x axis in AR
     var objFinalPosZ = objPoint.y - devicePoint.y;
@@ -135,6 +197,13 @@ var styles = StyleSheet.create({
     fontSize: 30,
     color: '#000000',
     textAlignVertical: 'center',
+    textAlign: 'center'
+  },
+  descriptionTextStyle: {
+    fontFamily: 'Arial',
+    fontSize: 15,
+    color: '#FFFFFF',
+    fontStyle: 'italic',
     textAlign: 'center'
   }
 });
