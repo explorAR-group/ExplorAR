@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ViroARScene, ViroText, ViroImage } from 'react-viro';
 import axios from 'axios';
+import { copyFileSync } from 'fs';
 
 export default class PointOfInterest extends Component {
   constructor() {
@@ -64,29 +65,25 @@ export default class PointOfInterest extends Component {
     tempArr = tempArr.filter(
       poi => Math.abs(poi.x) > 140 || Math.abs(poi.z) > 140
     );
-    console.warn(tempArr, 'NEW ARRRRAYYY');
     this.setState({ farPOIs: tempArr });
   }
 
   onClickName(id) {
     let copyPOI = this.state.POIs;
-    copyPOI.map(poi => {
-      if (poi.id === id) {
-        poi.fullView = !poi.fullView;
-      }
-      return poi;
-    });
+    copyPOI[id].fullView = !copyPOI[id].fullView;
     this.setState({ POIs: copyPOI });
   }
 
   render() {
+    // console.warn(this.state.POIs, 'this.state.POIs');
+
     return (
       <ViroARScene onTrackingInitialized={this._onInitialized}>
         {/* POI NAME */}
         {this.state.POIs.map(poi => {
           return (
             <ViroText
-              onClick={() => this.onClickName(poi.id)}
+              onClick={this.onClickName(poi.id)}
               transformBehaviors={['billboard']}
               key={poi.id}
               text={String(poi.name)}
