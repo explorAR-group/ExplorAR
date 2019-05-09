@@ -22,6 +22,7 @@ export default class PointOfInterest extends Component {
     this._onInitialized = this._onInitialized.bind(this);
     this._latLongToMerc = this._latLongToMerc.bind(this);
     this._transformPointToAR = this._transformPointToAR.bind(this);
+    this.onClickName = this.onClickName.bind(this);
   }
 
   async componentDidMount() {
@@ -39,9 +40,15 @@ export default class PointOfInterest extends Component {
     );
 
     // get API info from backend for POIs
-    const { data } = await axios.get(
+    let { data } = await axios.get(
       'http://172.16.23.29:8080/api/pointsOfInterest'
     );
+    //add fullview
+    data = data.map(poi => {
+      poi.fullView = false;
+      return poi;
+    });
+
     this.setState({ POIs: data });
 
     //Creating new set of POIs based on far distance
@@ -61,15 +68,25 @@ export default class PointOfInterest extends Component {
     this.setState({ farPOIs: tempArr });
   }
 
-  render() {
-    // console.warn(this.state.POIs, 'this.state.POIs');
+  onClickName(id) {
+    let copyPOI = this.state.POIs;
+    copyPOI.map(poi => {
+      if (poi.id === id) {
+        poi.fullView = !poi.fullView;
+      }
+      return poi;
+    });
+    this.setState({ POIs: copyPOI });
+  }
 
+  render() {
     return (
       <ViroARScene onTrackingInitialized={this._onInitialized}>
         {/* POI NAME */}
         {this.state.POIs.map(poi => {
           return (
             <ViroText
+              onClick={() => this.onClickName(poi.id)}
               transformBehaviors={['billboard']}
               key={poi.id}
               text={String(poi.name)}
@@ -88,46 +105,50 @@ export default class PointOfInterest extends Component {
         })}
         {/* POI DESCRIPTION */}
         {this.state.POIs.map(poi => {
-          return (
-            <ViroText
-              transformBehaviors={['billboard']}
-              key={poi.id}
-              text={String(poi.description)}
-              extrusionDepth={2}
-              height={3}
-              width={3}
-              scale={[3, 3, 3]}
-              textAlignVertical="top"
-              textLineBreakMode="justify"
-              textClipMode="clipToBounds"
-              position={(() => {
-                let point = this._transformPointToAR(
-                  poi.latitude,
-                  poi.longitude
-                );
-                return [point.x, -4, point.z];
-              })()}
-              style={styles.descriptionTextStyle}
-            />
-          );
+          if (poi.fullView) {
+            return (
+              <ViroText
+                transformBehaviors={['billboard']}
+                key={poi.id}
+                text={String(poi.description)}
+                extrusionDepth={2}
+                height={3}
+                width={3}
+                scale={[3, 3, 3]}
+                textAlignVertical="top"
+                textLineBreakMode="justify"
+                textClipMode="clipToBounds"
+                position={(() => {
+                  let point = this._transformPointToAR(
+                    poi.latitude,
+                    poi.longitude
+                  );
+                  return [point.x, -4, point.z];
+                })()}
+                style={styles.descriptionTextStyle}
+              />
+            );
+          }
         })}
         {/* POI IMAGE */}
         {this.state.POIs.map(poi => {
-          return (
-            <ViroImage
-              transformBehaviors={['billboard']}
-              key={poi.id}
-              source={{ uri: poi.imageUrl }}
-              scale={[5, 5, 5]}
-              position={(() => {
-                let point = this._transformPointToAR(
-                  poi.latitude,
-                  poi.longitude
-                );
-                return [point.x, 7, point.z];
-              })()}
-            />
-          );
+          if (poi.fullView) {
+            return (
+              <ViroImage
+                transformBehaviors={['billboard']}
+                key={poi.id}
+                source={{ uri: poi.imageUrl }}
+                scale={[5, 5, 5]}
+                position={(() => {
+                  let point = this._transformPointToAR(
+                    poi.latitude,
+                    poi.longitude
+                  );
+                  return [point.x, 7, point.z];
+                })()}
+              />
+            );
+          }
         })}
         {this.state.farPOIs.map(poi => {
           return (
