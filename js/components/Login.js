@@ -5,13 +5,14 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 
 import {
   View,
+  Image,
   TextInput,
   StyleSheet,
   Text,
   TouchableOpacity
 } from "react-native";
 
-export class AuthForm extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
 
@@ -29,17 +30,17 @@ export class AuthForm extends Component {
   }
 
   render() {
-    // console.warn(
-    //   "this.props.handleLoginSubmitThunk",
-    //   this.props.handleLoginSubmitThunk
-    // );
     return (
       <View style={styles.loginWrapper}>
         <Text style={styles.loginHeader}>
           Expl
-          <Icon name="globe-americas" size={20} color="#0000eb" />r
+          <Icon name="globe-americas" size={20} color="#8090be" />r
           <Text style={{ fontStyle: "italic" }}>AR</Text>
         </Text>
+        {/* <Image
+          style={{ height: 50, width: 293 }}
+          source={require("../res/ExplorAR-logo.png")}
+        /> */}
         <TextInput
           style={styles.loginInput}
           placeholder="Email"
@@ -63,7 +64,7 @@ export class AuthForm extends Component {
           //   this.handleLoginSubmit();
           // }}
           onPress={() => {
-            this.props.switchToAR();
+            this.props.enterAR();
           }}
         >
           <Text style={styles.loginButtonText}>Login</Text>
@@ -92,7 +93,7 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapLogin,
   mapDispatchToProps
-)(AuthForm);
+)(Login);
 
 const styles = StyleSheet.create({
   loginWrapper: {

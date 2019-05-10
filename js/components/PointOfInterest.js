@@ -32,37 +32,22 @@ export default class PointOfInterest extends Component {
   }
 
   async componentDidMount() {
-    try {
-      // get location info for device
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          this.setState({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            error: null
-          });
-        },
-        error => this.setState({ error: error.message }),
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-      );
+    // get location info for device
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          error: null
+        });
+      },
+      error => this.setState({ error: error.message }),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
 
-<<<<<<< HEAD
-      // get API info from backend for POIs
-      const { data } = await axios.get(
-        "http://172.16.23.1:8080/api/pointsOfInterest"
-      );
-      this.setState({ POIs: data });
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  render() {
-    console.warn(this.state.POIs, "this.state.POIs");
-=======
     // get API info from backend for POIs
     let { data } = await axios.get(
-      'http://172.16.23.29:8080/api/pointsOfInterest'
+      "http://172.16.23.1:8080/api/pointsOfInterest"
     );
     //add fullview
     data = data.map(poi => {
@@ -85,7 +70,7 @@ export default class PointOfInterest extends Component {
     tempArr = tempArr.filter(
       poi => Math.abs(poi.x) > 140 || Math.abs(poi.z) > 140
     );
-    console.warn(tempArr, 'NEW ARRRRAYYY');
+    console.warn(tempArr, "NEW ARRRRAYYY");
     this.setState({ farPOIs: tempArr });
   }
 
@@ -99,31 +84,16 @@ export default class PointOfInterest extends Component {
     });
     this.setState({ POIs: copyPOI });
   }
->>>>>>> master
 
   render() {
     return (
       <ViroARScene onTrackingInitialized={this._onInitialized}>
-<<<<<<< HEAD
-        <ViroAmbientLight color="#FFFFFF" />
-        <Viro3DObject
-          source={require("../res/bull/13927_Charging_Bull_Statue_of_Wall_Street_v1_L1.obj")}
-          resources={[
-            require("../res/bull/13927_Charging_Bull_Statue_of_Wall_Street_v1_L1.mtl"),
-            require("../res/bull/13927_Charging_Bull_Statue_of_Wall_Street_diff.jpg")
-          ]}
-          position={[0.0, 0.0, -1]}
-          scale={[0.001, 0.001, 0.001]}
-          type="OBJ"
-        />
-=======
         {/* POI NAME */}
->>>>>>> master
         {this.state.POIs.map(poi => {
           return (
             <ViroText
               onClick={() => this.onClickName(poi.id)}
-              transformBehaviors={['billboard']}
+              transformBehaviors={["billboard"]}
               key={poi.id}
               text={String(poi.name)}
               extrusionDepth={8}
@@ -144,7 +114,7 @@ export default class PointOfInterest extends Component {
           if (poi.fullView) {
             return (
               <ViroText
-                transformBehaviors={['billboard']}
+                transformBehaviors={["billboard"]}
                 key={poi.id}
                 text={String(poi.description)}
                 extrusionDepth={2}
@@ -171,7 +141,7 @@ export default class PointOfInterest extends Component {
           if (poi.fullView) {
             return (
               <ViroImage
-                transformBehaviors={['billboard']}
+                transformBehaviors={["billboard"]}
                 key={poi.id}
                 source={{ uri: poi.imageUrl }}
                 scale={[5, 5, 5]}
@@ -189,7 +159,7 @@ export default class PointOfInterest extends Component {
         {this.state.farPOIs.map(poi => {
           return (
             <ViroText
-              transformBehaviors={['billboard']}
+              transformBehaviors={["billboard"]}
               key={poi.id}
               text={String(poi.name)}
               extrusionDepth={8}
@@ -208,7 +178,7 @@ export default class PointOfInterest extends Component {
         {this.state.farPOIs.map(poi => {
           return (
             <ViroText
-              transformBehaviors={['billboard']}
+              transformBehaviors={["billboard"]}
               key={poi.id}
               text="!"
               extrusionDepth={8}
@@ -246,10 +216,6 @@ export default class PointOfInterest extends Component {
     //   this.state.longitude
     // );
     var devicePoint = this._latLongToMerc(40.7049444, -74.0091771);
-<<<<<<< HEAD
-    console.log("objPointZ: " + objPoint.y + ", objPointX: " + objPoint.x);
-=======
->>>>>>> master
     // latitude(north,south) maps to the z axis in AR
     // longitude(east, west) maps to the x axis in AR
     var objFinalPosZ = objPoint.y - devicePoint.y;
@@ -263,22 +229,16 @@ var styles = StyleSheet.create({
   helloWorldTextStyle: {
     fontFamily: "Arial",
     fontSize: 30,
-<<<<<<< HEAD
     color: "#000000",
     textAlignVertical: "center",
     textAlign: "center"
-=======
-    color: '#000000',
-    textAlignVertical: 'center',
-    textAlign: 'center'
   },
   descriptionTextStyle: {
-    fontFamily: 'Arial',
+    fontFamily: "Arial",
     fontSize: 15,
-    color: '#FFFFFF',
-    fontStyle: 'italic',
-    textAlign: 'center'
->>>>>>> master
+    color: "#FFFFFF",
+    fontStyle: "italic",
+    textAlign: "center"
   }
 });
 
