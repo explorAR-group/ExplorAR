@@ -47,7 +47,7 @@ export default class PointOfInterest extends Component {
 
     // get API info from backend for POIs
     let { data } = await axios.get(
-      "http://172.16.23.1:8080/api/pointsOfInterest"
+      "http://192.168.1.4:8080/api/pointsOfInterest"
     );
     //add fullview
     data = data.map(poi => {

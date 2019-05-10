@@ -17,34 +17,36 @@ export default class ViroSample extends Component {
       screen: splash
     };
 
-    this._enterAR = this._enterAR.bind(this);
-    this._enterLogin = this._enterLogin.bind(this);
+    this._goToAR = this._goToAR.bind(this);
+    this._goToLogin = this._goToLogin.bind(this);
   }
 
   render() {
-    <Provider store={store}>
-      {(() => {
-        switch (this.state.screen) {
-          case splash:
-            return <Splash enterLogin={this._enterLogin} />;
-          case login:
-            return <Login enterAR={this._enterAR} />;
-          case ar:
-            return <AR enterLogin={this._enterLogin} />;
-          default:
-            return <Login enterAR={this._enterAR} />;
-        }
-      })()}
-    </Provider>;
+    return (
+      <Provider store={store}>
+        {(() => {
+          switch (this.state.screen) {
+            case splash:
+              return <Splash goToLogin={this._goToLogin} />;
+            case login:
+              return <Login goToAR={this._goToAR} />;
+            case ar:
+              return <AR goToLogin={this._goToLogin} />;
+            default:
+              return <Login goToAR={this._goToAR} />;
+          }
+        })()}
+      </Provider>
+    );
   }
 
-  _enterAR() {
+  _goToAR() {
     this.setState({
       screen: ar
     });
   }
 
-  _enterLogin() {
+  _goToLogin() {
     this.setState({
       screen: login
     });

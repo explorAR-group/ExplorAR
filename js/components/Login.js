@@ -32,11 +32,12 @@ class Login extends Component {
   render() {
     return (
       <View style={styles.loginWrapper}>
-        <Text style={styles.loginHeader}>
+        <Text style={styles.loginH1}>
           Expl
-          <Icon name="globe-americas" size={20} color="#8090be" />r
+          <Icon name="globe-americas" size={20} color="#3232A0" />r
           <Text style={{ fontStyle: "italic" }}>AR</Text>
         </Text>
+        <Text style={styles.loginH2}>Log in to continue</Text>
         {/* <Image
           style={{ height: 50, width: 293 }}
           source={require("../res/ExplorAR-logo.png")}
@@ -64,11 +65,12 @@ class Login extends Component {
           //   this.handleLoginSubmit();
           // }}
           onPress={() => {
-            this.props.enterAR();
+            this.props.goToAR();
           }}
         >
-          <Text style={styles.loginButtonText}>Login</Text>
+          <Text style={styles.loginButtonText}>Log in</Text>
         </TouchableOpacity>
+        <Text style={styles.loginP}>Or create an account</Text>
       </View>
     );
   }
@@ -103,11 +105,11 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20
   },
-  loginHeader: {
+  loginH1: {
     fontSize: 35,
     color: "#3d3d3d",
     textAlign: "center",
-    margin: 10
+    margin: 30
   },
   loginInput: {
     fontStyle: "italic",
@@ -126,5 +128,16 @@ const styles = StyleSheet.create({
   },
   loginButtonText: {
     color: "#ffffff"
+  },
+  loginH2: {
+    fontSize: 20,
+    color: "#3d3d3d",
+    textAlign: "center",
+    margin: 30
+  },
+  loginP: {
+    color: "#3d3d3d",
+    textAlign: "center",
+    margin: 30
   }
 });
