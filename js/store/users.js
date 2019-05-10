@@ -36,7 +36,6 @@ export const auth = (email, password, method) => async dispatch => {
       email,
       password
     });
-    console.warn(this.props.state);
   } catch (authError) {
     return dispatch(setUser({ error: authError }));
   }
@@ -51,9 +50,9 @@ export const auth = (email, password, method) => async dispatch => {
 
 export const logout = () => async dispatch => {
   try {
-    await axios.post("/auth/logout");
+    await axios.post("http://172.16.23.1:8080/auth/logout");
     dispatch(removeUser());
-    history.push("/login");
+    // history.push("/login");
   } catch (err) {
     console.error(err);
   }
@@ -65,7 +64,7 @@ export const logout = () => async dispatch => {
 export default function(state = defaultUser, action) {
   switch (action.type) {
     case GET_USER:
-      return { ...state, user: action.user };
+      return action.user;
     case REMOVE_USER:
       return defaultUser;
     default:

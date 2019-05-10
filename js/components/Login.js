@@ -30,6 +30,7 @@ class Login extends Component {
   }
 
   render() {
+    // console.warn(this.state);
     return (
       <View style={styles.loginWrapper}>
         <Text style={styles.loginH1}>
@@ -37,40 +38,50 @@ class Login extends Component {
           <Icon name="globe-americas" size={20} color="#3232A0" />r
           <Text style={{ fontStyle: "italic" }}>AR</Text>
         </Text>
-        <Text style={styles.loginH2}>Log in to continue</Text>
-        {/* <Image
+        {isLoggedIn ? (
+          <Text style={styles.loginP}>YAY! LOGGED IN!</Text>
+        ) : (
+          <>
+            <Text style={styles.loginH2}>Log in to continue</Text>
+            {/* <Image
           style={{ height: 50, width: 293 }}
           source={require("../res/ExplorAR-logo.png")}
         /> */}
-        <TextInput
-          style={styles.loginInput}
-          placeholder="Email"
-          placeholderTextColor="#6e6e6e"
-          autoCapitalize="none"
-          value={this.state.email}
-          onChangeText={email => this.setState({ email })}
-        />
-        <TextInput
-          style={styles.loginInput}
-          secureTextEntry={true}
-          placeholder="Password"
-          placeholderTextColor="#6e6e6e"
-          autoCapitalize="none"
-          value={this.state.password}
-          onChangeText={password => this.setState({ password })}
-        />
-        <TouchableOpacity
-          style={styles.loginButton}
-          // onPress={() => {
-          //   this.handleLoginSubmit();
-          // }}
-          onPress={() => {
-            this.props.goToAR();
-          }}
-        >
-          <Text style={styles.loginButtonText}>Log in</Text>
-        </TouchableOpacity>
-        <Text style={styles.loginP}>Or create an account</Text>
+            <TextInput
+              style={styles.loginInput}
+              placeholder="Email"
+              placeholderTextColor="#6e6e6e"
+              autoCapitalize="none"
+              value={this.state.email}
+              onChangeText={email => this.setState({ email })}
+            />
+            <TextInput
+              style={styles.loginInput}
+              secureTextEntry={true}
+              placeholder="Password"
+              placeholderTextColor="#6e6e6e"
+              autoCapitalize="none"
+              value={this.state.password}
+              onChangeText={password => this.setState({ password })}
+            />
+            <TouchableOpacity
+              style={styles.loginButton}
+              // onPress={() => {
+              //   this.handleLoginSubmit();
+              // }}
+              onPress={() => {
+                this.handleLoginSubmit();
+                // this.props.goToAR();
+              }}
+            >
+              <Text style={styles.loginButtonText}>Log in</Text>
+            </TouchableOpacity>
+            <Text style={styles.loginP}>Or create an account</Text>
+          </>
+        )}
+        {this.props.error && this.props.error.response && (
+          <Text style={styles.loginP}> {error.response.data} </Text>
+        )}
       </View>
     );
   }
@@ -80,7 +91,8 @@ const mapLogin = state => {
   return {
     name: "login",
     displayName: "Login",
-    error: state.user.error
+    error: state.user.error,
+    isLoggedIn: !!state.user.id
   };
 };
 
