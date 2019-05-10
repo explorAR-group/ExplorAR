@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { auth } from "../store/users.js";
+import { auth, logout } from "../store/users.js";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
 import {
@@ -29,6 +29,10 @@ class Login extends Component {
     this.props.handleLoginSubmitThunk(email, password);
   }
 
+  handleLogout() {
+    this.props.handleLogoutThunk();
+  }
+
   render() {
     // console.warn(this.state);
     return (
@@ -38,8 +42,28 @@ class Login extends Component {
           <Icon name="globe-americas" size={20} color="#3232A0" />r
           <Text style={{ fontStyle: "italic" }}>AR</Text>
         </Text>
-        {isLoggedIn ? (
-          <Text style={styles.loginP}>YAY! LOGGED IN!</Text>
+        {this.props.user.id ? (
+          <>
+            <Text style={styles.loginP}>
+              Hello {this.props.user.firstName}!
+            </Text>
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={() => {
+                this.props.goToAR();
+              }}
+            >
+              <Text style={styles.loginButtonText}>Go to AR!</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={() => {
+                this.handleLogout();
+              }}
+            >
+              <Text style={styles.loginButtonText}>Logout</Text>
+            </TouchableOpacity>
+          </>
         ) : (
           <>
             <Text style={styles.loginH2}>Log in to continue</Text>
@@ -64,23 +88,21 @@ class Login extends Component {
               value={this.state.password}
               onChangeText={password => this.setState({ password })}
             />
+            {this.props.user.error && this.props.user.error.response && (
+              <Text style={styles.loginError}>
+                {this.props.user.error.response.data}
+              </Text>
+            )}
             <TouchableOpacity
               style={styles.loginButton}
-              // onPress={() => {
-              //   this.handleLoginSubmit();
-              // }}
               onPress={() => {
                 this.handleLoginSubmit();
-                // this.props.goToAR();
               }}
             >
               <Text style={styles.loginButtonText}>Log in</Text>
             </TouchableOpacity>
             <Text style={styles.loginP}>Or create an account</Text>
           </>
-        )}
-        {this.props.error && this.props.error.response && (
-          <Text style={styles.loginP}> {error.response.data} </Text>
         )}
       </View>
     );
@@ -89,10 +111,8 @@ class Login extends Component {
 
 const mapLogin = state => {
   return {
-    name: "login",
-    displayName: "Login",
-    error: state.user.error,
-    isLoggedIn: !!state.user.id
+    user: state.user,
+    error: state.user.error
   };
 };
 
@@ -100,6 +120,9 @@ const mapDispatchToProps = dispatch => {
   return {
     handleLoginSubmitThunk: function(email, password) {
       dispatch(auth(email, password, "login"));
+    },
+    handleLogoutThunk: function() {
+      dispatch(logout());
     }
   };
 };
@@ -136,7 +159,8 @@ const styles = StyleSheet.create({
   loginButton: {
     alignItems: "center",
     backgroundColor: "#6e6e6e",
-    padding: 10
+    padding: 10,
+    margin: 10
   },
   loginButtonText: {
     color: "#ffffff"
@@ -149,6 +173,11 @@ const styles = StyleSheet.create({
   },
   loginP: {
     color: "#3d3d3d",
+    textAlign: "center",
+    margin: 10
+  },
+  loginError: {
+    color: "#ff0800",
     textAlign: "center",
     margin: 10
   }
