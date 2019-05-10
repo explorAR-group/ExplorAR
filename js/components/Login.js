@@ -31,6 +31,10 @@ class Login extends Component {
 
   handleLogout() {
     this.props.handleLogoutThunk();
+    this.setState({
+      email: "",
+      password: ""
+    });
   }
 
   render() {
