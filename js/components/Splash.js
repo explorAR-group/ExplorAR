@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import LinearGradient from "react-native-linear-gradient";
+// import LinearGradient from "react-native-linear-gradient";
 
 export default class Splash extends Component {
   async componentDidMount() {
@@ -12,16 +12,13 @@ export default class Splash extends Component {
 
   render() {
     return (
-      <LinearGradient
-        colors={["#3232A0", "#05058C", "#050573"]}
-        style={styles.container}
-      >
+      <View style={styles.container}>
         <Text style={styles.welcome}>
           Expl
           <Icon name="globe-americas" size={30} />r
           <Text style={{ fontStyle: "italic" }}>AR</Text>
         </Text>
-      </LinearGradient>
+      </View>
     );
   }
 }

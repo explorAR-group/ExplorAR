@@ -12,11 +12,11 @@ export default class AR extends Component {
   render() {
     return (
       <View style={styles.outer}>
-        {/* <ViroARSceneNavigator
+        <ViroARSceneNavigator
           apiKey="C63BC372-68BB-4F10-B21A-7EC8E1ABFFC0"
           worldAlignment="GravityAndHeading"
           initialScene={{ scene: InitialARScene }}
-        /> */}
+        />
         <View
           style={{
             position: "absolute",

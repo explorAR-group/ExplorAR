@@ -32,46 +32,50 @@ export default class PointOfInterest extends Component {
   }
 
   async componentDidMount() {
-    // get location info for device
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null
-        });
-      },
-      error => this.setState({ error: error.message }),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
+    try {
+      // get location info for device
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          this.setState({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            error: null
+          });
+        },
+        error => this.setState({ error: error.message }),
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      );
 
-    // get API info from backend for POIs
-    let { data } = await axios.get(
-      "http://192.168.1.4:8080/api/pointsOfInterest"
-    );
-    //add fullview
-    data = data.map(poi => {
-      poi.fullView = false;
-      return poi;
-    });
+      // get API info from backend for POIs
+      let { data } = await axios.get(
+        "http://172.16.23.1:8080/api/pointsOfInterest"
+      );
+      //add fullview
+      data = data.map(poi => {
+        poi.fullView = false;
+        return poi;
+      });
 
-    this.setState({ POIs: data });
+      this.setState({ POIs: data });
 
-    //Creating new set of POIs based on far distance
-    // this.state.POIs.filter(elem => elem.longitude > 300)
+      //Creating new set of POIs based on far distance
+      // this.state.POIs.filter(elem => elem.longitude > 300)
 
-    let tempArr = this.state.POIs.map(poi => {
-      let point = this._transformPointToAR(poi.latitude, poi.longitude);
-      poi.x = point.x;
-      poi.z = point.z;
-      return poi;
-    });
+      let tempArr = this.state.POIs.map(poi => {
+        let point = this._transformPointToAR(poi.latitude, poi.longitude);
+        poi.x = point.x;
+        poi.z = point.z;
+        return poi;
+      });
 
-    tempArr = tempArr.filter(
-      poi => Math.abs(poi.x) > 140 || Math.abs(poi.z) > 140
-    );
-    console.warn(tempArr, "NEW ARRRRAYYY");
-    this.setState({ farPOIs: tempArr });
+      tempArr = tempArr.filter(
+        poi => Math.abs(poi.x) > 140 || Math.abs(poi.z) > 140
+      );
+      console.warn(tempArr, "NEW ARRRRAYYY");
+      this.setState({ farPOIs: tempArr });
+    } catch (error) {
+      console.warn(error);
+    }
   }
 
   onClickName(id) {

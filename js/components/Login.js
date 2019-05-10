@@ -44,7 +44,7 @@ class Login extends Component {
         </Text>
         {this.props.user.id ? (
           <>
-            <Text style={styles.loginP}>
+            <Text style={styles.loginH2}>
               Hello {this.props.user.firstName}!
             </Text>
             <TouchableOpacity
@@ -53,7 +53,9 @@ class Login extends Component {
                 this.props.goToAR();
               }}
             >
-              <Text style={styles.loginButtonText}>Go to AR!</Text>
+              <Text style={styles.loginButtonText}>
+                <Icon name="mobile-alt" /> Go to AR!
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.loginButton}
@@ -61,7 +63,9 @@ class Login extends Component {
                 this.handleLogout();
               }}
             >
-              <Text style={styles.loginButtonText}>Logout</Text>
+              <Text style={styles.loginButtonText}>
+                <Icon name="sign-out-alt" /> Logout
+              </Text>
             </TouchableOpacity>
           </>
         ) : (
@@ -99,7 +103,9 @@ class Login extends Component {
                 this.handleLoginSubmit();
               }}
             >
-              <Text style={styles.loginButtonText}>Log in</Text>
+              <Text style={styles.loginButtonText}>
+                <Icon name="key" /> Log in
+              </Text>
             </TouchableOpacity>
             <Text style={styles.loginP}>Or create an account</Text>
           </>
