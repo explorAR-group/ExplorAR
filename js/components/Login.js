@@ -133,11 +133,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#3d3d3d",
     textAlign: "center",
-    margin: 30
+    margin: 20
   },
   loginP: {
     color: "#3d3d3d",
     textAlign: "center",
-    margin: 30
+    margin: 10
   }
 });
