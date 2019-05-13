@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { auth, logout } from "../store/users.js";
-import Icon from "react-native-vector-icons/FontAwesome5";
-
 import {
   View,
   Image,
@@ -11,24 +9,20 @@ import {
   Text,
   TouchableOpacity
 } from "react-native";
-
 class Login extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       email: "",
       password: ""
     };
     this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
   }
-
   handleLoginSubmit() {
     const email = this.state.email;
     const password = this.state.password;
     this.props.handleLoginSubmitThunk(email, password);
   }
-
   handleLogout() {
     this.props.handleLogoutThunk();
     this.setState({
@@ -36,16 +30,19 @@ class Login extends Component {
       password: ""
     });
   }
-
   render() {
     // console.warn(this.state);
     return (
       <View style={styles.loginWrapper}>
-        <Text style={styles.loginH1}>
-          Expl
-          <Icon name="globe-americas" size={20} color="#3232A0" />r
-          <Text style={{ fontStyle: "italic" }}>AR</Text>
-        </Text>
+        <View style={styles.loginLogo}>
+          <Text style={styles.loginH1}>Expl</Text>
+          <Image
+            source={require("../res/globe-americas-solid-blue.png")}
+            style={{ width: 30, height: 30 }}
+          />
+          <Text style={styles.loginH1}>r</Text>
+          <Text style={[styles.loginH1, { fontStyle: "italic" }]}>AR</Text>
+        </View>
         {this.props.user.id ? (
           <>
             <Text style={styles.loginH2}>
@@ -57,9 +54,7 @@ class Login extends Component {
                 this.props.goToAR();
               }}
             >
-              <Text style={styles.loginButtonText}>
-                <Icon name="mobile-alt" /> Go to AR!
-              </Text>
+              <Text style={styles.loginButtonText}>Go to AR!</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.loginButton}
@@ -67,18 +62,12 @@ class Login extends Component {
                 this.handleLogout();
               }}
             >
-              <Text style={styles.loginButtonText}>
-                <Icon name="sign-out-alt" /> Logout
-              </Text>
+              <Text style={styles.loginButtonText}>Logout</Text>
             </TouchableOpacity>
           </>
         ) : (
           <>
             <Text style={styles.loginH2}>Log in to continue</Text>
-            {/* <Image
-          style={{ height: 50, width: 293 }}
-          source={require("../res/ExplorAR-logo.png")}
-        /> */}
             <TextInput
               style={styles.loginInput}
               placeholder="Email"
@@ -107,9 +96,7 @@ class Login extends Component {
                 this.handleLoginSubmit();
               }}
             >
-              <Text style={styles.loginButtonText}>
-                <Icon name="key" /> Log in
-              </Text>
+              <Text style={styles.loginButtonText}>Log in</Text>
             </TouchableOpacity>
             <Text style={styles.loginP}>Or create an account</Text>
           </>
@@ -118,14 +105,12 @@ class Login extends Component {
     );
   }
 }
-
 const mapLogin = state => {
   return {
     user: state.user,
     error: state.user.error
   };
 };
-
 const mapDispatchToProps = dispatch => {
   return {
     handleLoginSubmitThunk: function(email, password) {
@@ -136,12 +121,10 @@ const mapDispatchToProps = dispatch => {
     }
   };
 };
-
 export default connect(
   mapLogin,
   mapDispatchToProps
 )(Login);
-
 const styles = StyleSheet.create({
   loginWrapper: {
     flex: 1,
@@ -150,11 +133,16 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20
   },
+  loginLogo: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center"
+  },
   loginH1: {
     fontSize: 35,
     color: "#3d3d3d",
-    textAlign: "center",
-    margin: 30
+    textAlign: "center"
   },
   loginInput: {
     fontStyle: "italic",

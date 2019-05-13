@@ -1,10 +1,11 @@
-import axios from 'axios';
+import axios from "axios";
+import { LOCALIP } from "../../constants";
 
 /**
  * ACTION TYPES
  */
-const GET_USER = 'GET_USER';
-const REMOVE_USER = 'REMOVE_USER';
+const GET_USER = "GET_USER";
+const REMOVE_USER = "REMOVE_USER";
 
 /**
  * INITIAL STATE
@@ -22,7 +23,7 @@ const removeUser = () => ({ type: REMOVE_USER });
  */
 export const me = () => async dispatch => {
   try {
-    const res = await axios.get('/auth/me');
+    const res = await axios.get("/auth/me");
     dispatch(setUser(res.data || defaultUser));
   } catch (err) {
     console.error(err);
@@ -32,7 +33,7 @@ export const me = () => async dispatch => {
 export const auth = (email, password, method) => async dispatch => {
   let res;
   try {
-    res = await axios.post(`http://192.168.3.105:8080/auth/${method}`, {
+    res = await axios.post(`http://${LOCALIP}:8080/auth/${method}`, {
       email,
       password
     });
@@ -49,7 +50,7 @@ export const auth = (email, password, method) => async dispatch => {
 
 export const logout = () => async dispatch => {
   try {
-    await axios.post('http://192.168.3.105:8080/auth/logout');
+    await axios.post(`http://${LOCALIP}:8080/auth/logout`);
     dispatch(removeUser());
   } catch (err) {
     console.error(err);
