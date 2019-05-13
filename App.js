@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { Provider } from "react-redux";
-import store from "./js/store/index";
-import Login from "./js/components/Login";
-import Splash from "./js/components/Splash";
-import AR from "./js/components/AR";
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
+import store from './js/store/index';
+import Login from './js/components/Login';
+import Splash from './js/components/Splash';
+import AR from './js/components/AR';
 
-const ar = "ar";
-const login = "login";
-const splash = "splash";
+const ar = 'ar';
+const login = 'login';
+const splash = 'splash';
 
 export default class ViroSample extends Component {
   constructor() {
