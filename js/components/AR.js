@@ -1,14 +1,11 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { ViroARSceneNavigator } from "react-viro";
-
 const InitialARScene = require("./PointOfInterest");
-
 export default class AR extends Component {
   constructor(props) {
     super(props);
   }
-
   render() {
     return (
       <View style={styles.outer}>
@@ -21,9 +18,9 @@ export default class AR extends Component {
           style={{
             position: "absolute",
             left: 0,
-            right: 0,
-            bottom: 10,
-            alignItems: "center"
+            right: 20,
+            top: 20,
+            alignItems: "flex-end"
           }}
         >
           <TouchableOpacity
@@ -32,14 +29,16 @@ export default class AR extends Component {
               this.props.goToLogin();
             }}
           >
-            <Text style={styles.exitButtonText}>Exit AR</Text>
+            <Image
+              source={require("../res/times-circle.png")}
+              style={{ width: 30, height: 30 }}
+            />
           </TouchableOpacity>
         </View>
       </View>
     );
   }
 }
-
 const styles = StyleSheet.create({
   outer: {
     flex: 1,
@@ -59,13 +58,5 @@ const styles = StyleSheet.create({
     color: "#fff",
     textAlign: "center",
     fontSize: 25
-  },
-  exitButton: {
-    alignItems: "center",
-    backgroundColor: "#6e6e6e",
-    padding: 10
-  },
-  exitButtonText: {
-    color: "#ffffff"
   }
 });
