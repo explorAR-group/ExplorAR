@@ -1,10 +1,10 @@
-"use strict";
-import React, { Component } from "react";
-import { StyleSheet, View } from "react-native";
-import { ViroARScene, ViroText, ViroImage } from "react-viro";
-import axios from "axios";
-import { copyFileSync } from "fs";
-import { LOCALIP } from "../../constants";
+'use strict';
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { ViroARScene, ViroText, ViroImage } from 'react-viro';
+import axios from 'axios';
+import { copyFileSync } from 'fs';
+import { API_URL } from '../../constants';
 
 export default class PointOfInterest extends Component {
   constructor() {
@@ -12,7 +12,7 @@ export default class PointOfInterest extends Component {
 
     // Set initial state here
     this.state = {
-      text: "Initializing AR...",
+      text: 'Initializing AR...',
       error: null,
       POIs: [],
       latitude: 0,
@@ -42,9 +42,7 @@ export default class PointOfInterest extends Component {
     );
 
     // get API info from backend for POIs
-    let { data } = await axios.get(
-      `http://${LOCALIP}:8080/api/pointsOfInterest`
-    );
+    let { data } = await axios.get(`${API_URL}/api/pointsOfInterest`);
     //add fullview
     data = data.map(poi => {
       poi.fullView = false;
@@ -85,7 +83,7 @@ export default class PointOfInterest extends Component {
           return (
             <ViroText
               onClick={this.onClickName(poi.id)}
-              transformBehaviors={["billboard"]}
+              transformBehaviors={['billboard']}
               key={poi.id}
               text={String(poi.name)}
               extrusionDepth={8}
@@ -106,7 +104,7 @@ export default class PointOfInterest extends Component {
           if (poi.fullView) {
             return (
               <ViroText
-                transformBehaviors={["billboard"]}
+                transformBehaviors={['billboard']}
                 key={poi.id}
                 text={String(poi.description)}
                 extrusionDepth={2}
@@ -133,7 +131,7 @@ export default class PointOfInterest extends Component {
           if (poi.fullView) {
             return (
               <ViroImage
-                transformBehaviors={["billboard"]}
+                transformBehaviors={['billboard']}
                 key={poi.id}
                 source={{ uri: poi.imageUrl }}
                 scale={[5, 5, 5]}
@@ -151,7 +149,7 @@ export default class PointOfInterest extends Component {
         {this.state.farPOIs.map(poi => {
           return (
             <ViroText
-              transformBehaviors={["billboard"]}
+              transformBehaviors={['billboard']}
               key={poi.id}
               text={String(poi.name)}
               extrusionDepth={8}
@@ -170,7 +168,7 @@ export default class PointOfInterest extends Component {
         {this.state.farPOIs.map(poi => {
           return (
             <ViroText
-              transformBehaviors={["billboard"]}
+              transformBehaviors={['billboard']}
               key={poi.id}
               text="!"
               extrusionDepth={8}
@@ -219,18 +217,18 @@ export default class PointOfInterest extends Component {
 
 var styles = StyleSheet.create({
   helloWorldTextStyle: {
-    fontFamily: "Arial",
+    fontFamily: 'Arial',
     fontSize: 30,
-    color: "#000000",
-    textAlignVertical: "center",
-    textAlign: "center"
+    color: '#000000',
+    textAlignVertical: 'center',
+    textAlign: 'center'
   },
   descriptionTextStyle: {
-    fontFamily: "Arial",
+    fontFamily: 'Arial',
     fontSize: 15,
-    color: "#FFFFFF",
-    fontStyle: "italic",
-    textAlign: "center"
+    color: '#FFFFFF',
+    fontStyle: 'italic',
+    textAlign: 'center'
   }
 });
 
