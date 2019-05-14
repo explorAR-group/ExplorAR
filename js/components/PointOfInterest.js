@@ -7,7 +7,9 @@ import {
   ViroImage,
   Viro3DObject,
   ViroAmbientLight,
-  ViroFlexView
+  ViroFlexView,
+  ViroPolygon,
+  ViroMaterials
 } from "react-viro";
 import axios from "axios";
 import { LOCALIP } from "../../constants";
@@ -118,6 +120,7 @@ export default class PointOfInterest extends Component {
   render() {
     return (
       <ViroARScene onTrackingUpdated={this._onUpdated}>
+        <ViroAmbientLight color="#ffffff" />
         {/* POI NAME */}
         {this.state.POIs.map(poi => {
           return (
@@ -248,39 +251,31 @@ export default class PointOfInterest extends Component {
             />
           );
         })}
-        <ViroFlexView
-          height={2.5}
-          width={5}
+        {this.state.farPOIs.map(poi => {
+          return (
+            <ViroImage
+              transformBehaviors={["billboard"]}
+              key={poi.id}
+              source={require("../res/purpback.jpg")}
+              scale={[5, 5, 5]}
+              position={(() => {
+                let point = this._transformPointToAR(
+                  poi.latitude,
+                  poi.longitude
+                );
+                return [point.x * 0.06, 1.25, point.z * 0.06];
+              })()}
+            />
+          );
+        })}
+
+        {/* <ViroFlexView
+          height={3}
+          width={4}
           position={[0, 0, -10]}
           transformBehaviors={["billboard"]}
-          backgroundColor={"red"}
-        >
-          <ViroFlexView
-            backgroundColor={"green"}
-            style={{ flex: 0.2, flexDirection: "row" }}
-          >
-            <ViroFlexView backgroundColor={"white"} style={{ flex: 0.1 }}>
-              <ViroImage
-                style={{ flex: 1 }}
-                source={require("../res/times-circle.png")}
-              />
-            </ViroFlexView>
-            <ViroFlexView
-              backgroundColor={"yellow"}
-              style={{ flex: 0.9, flexDirection: "row" }}
-            />
-          </ViroFlexView>
-          <ViroFlexView
-            backgroundColor={"grey"}
-            style={{ flex: 0.8, flexDirection: "row" }}
-          >
-            <ViroText
-              style={{ color: "#ff0000", flex: 1 }}
-              text={"Hello"}
-              fontSize={30}
-            />
-          </ViroFlexView>
-        </ViroFlexView>
+          backgroundColor={"black"}
+        /> */}
 
         {/* {this.state.POIs.map(poi => {
           //do growing animation
@@ -337,6 +332,13 @@ export default class PointOfInterest extends Component {
     return { x: objFinalPosX, z: -objFinalPosZ };
   }
 }
+
+ViroMaterials.createMaterials({
+  felt: {
+    diffuseTexture: require("../res/felt_mat.jpg"),
+    lightingModel: "Lambert"
+  }
+});
 
 var styles = StyleSheet.create({
   Attractions: {
