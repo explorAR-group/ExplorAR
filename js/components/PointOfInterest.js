@@ -185,6 +185,31 @@ export default class PointOfInterest extends Component {
             );
           }
         })}
+        {this.state.POIs.map(poi => {
+          if (poi.fullView) {
+            //do growing animation
+            return (
+              <ViroImage
+                transformBehaviors={["billboard"]}
+                key={poi.id}
+                // opacity={}
+                source={{
+                  uri:
+                    "https://img.freepik.com/free-vector/vibrant-lines-black-background-vector_53876-86309.jpg?size=338&ext=jpg"
+                }}
+                scale={[12, 15, 10]}
+                position={(() => {
+                  let point = this._transformPointToAR(
+                    poi.latitude,
+                    poi.longitude
+                  );
+                  return [point.x, 3, point.z - 1.5];
+                })()}
+              />
+            );
+          }
+        })}
+        {/* DISTANT POIS */}
         {this.state.farPOIs.map(poi => {
           return (
             <ViroText
@@ -206,6 +231,23 @@ export default class PointOfInterest extends Component {
         })}
         {this.state.farPOIs.map(poi => {
           return (
+            <ViroImage
+              transformBehaviors={["billboard"]}
+              key={poi.id}
+              source={require("../res/distantPOImarker.png")}
+              scale={[3, 3, 3]}
+              position={(() => {
+                let point = this._transformPointToAR(
+                  poi.latitude,
+                  poi.longitude
+                );
+                return [point.x * 0.05, 3, point.z * 0.05];
+              })()}
+            />
+          );
+        })}
+        {/* {this.state.farPOIs.map(poi => {
+          return (
             <ViroText
               transformBehaviors={["billboard"]}
               key={poi.id}
@@ -217,12 +259,12 @@ export default class PointOfInterest extends Component {
                   poi.latitude,
                   poi.longitude
                 );
-                return [point.x * 0.05, 3, point.z * 0.05];
+                return 
               })()}
               style={styles[poi.category]}
             />
           );
-        })}
+        })} */}
       </ViroARScene>
     );
   }
