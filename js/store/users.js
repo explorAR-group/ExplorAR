@@ -32,7 +32,7 @@ export const me = () => async dispatch => {
 export const auth = (email, password, method) => async dispatch => {
   let res;
   try {
-    res = await axios.post(`http://192.168.3.105:8080/auth/${method}`, {
+    res = await axios.post(`http://172.16.23.29:8080/auth/${method}`, {
       email,
       password
     });
@@ -49,7 +49,7 @@ export const auth = (email, password, method) => async dispatch => {
 
 export const logout = () => async dispatch => {
   try {
-    await axios.post('http://192.168.3.105:8080/auth/logout');
+    await axios.post('http://172.16.23.29:8080/auth/logout');
     dispatch(removeUser());
   } catch (err) {
     console.error(err);

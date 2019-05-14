@@ -20,8 +20,8 @@ export default class PointOfInterest extends Component {
     this.state = {
       text: 'Initializing AR...',
       POIs: [],
-      latitude: 40.7049444,
-      longitude: -74.0091771,
+      latitude: 0,
+      longitude: 0,
       farPOIs: []
     };
 
@@ -34,35 +34,44 @@ export default class PointOfInterest extends Component {
 
   async componentDidMount() {
     // get location info for device - SETUP
+    console.warn(this, 'this within component did mount');
 
-    async function success(position) {
-      currentLat = position.coords.latitude;
-      console.warn(position.coords.latitude, 'pos coords lat');
-      currentLong = position.coords.longitude; // I can't seem to get the Coordinate info out of this function??
-      console.warn(currentLat, 'current lat');
-      console.warn(this, 'this'); // this is undefined here?? maybe there is a better place to set this state??
-      await this.setState({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
-      });
-    }
+    // try {
+    //   // get location info for device - CALL
 
-    function error(err) {
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-    }
+    //   await new Promise((resolve, reject) => {
+    //     let success = async position => {
+    //       currentLat = position.coords.latitude;
+    //       console.warn(this, 'this within success');
 
-    let options = {
-      enableHighAccuracy: true,
-      timeout: 2000,
-      maximumAge: 0
-    };
+    //       console.warn(position.coords.latitude, 'pos coords lat');
+    //       currentLong = position.coords.longitude;
+    //       console.warn(currentLat, 'current lat');
+    //       await this.setState({
+    //         latitude: position.coords.latitude,
+    //         longitude: position.coords.longitude
+    //       });
+    //       resolve();
+    //     };
 
-    try {
-      // get location info for device - CALL
-      await navigator.geolocation.getCurrentPosition(success, error, options);
-    } catch (err) {
-      console.warn(err);
-    }
+    //     function error(err) {
+    //       console.warn(`ERROR(${err.code}): ${err.message}`);
+    //       reject(err);
+    //     }
+
+    //     let options = {
+    //       enableHighAccuracy: true,
+    //       timeout: 2000,
+    //       maximumAge: 0
+    //     };
+
+    //     navigator.geolocation.getCurrentPosition(success, error, options);
+    //   });
+
+    //   console.warn('res banana', res);
+    // } catch (err) {
+    //   console.warn(err);
+    // }
 
     console.warn(currentLat, 'current lat END');
     console.warn(this.state.latitude, 'this.state.lat END');

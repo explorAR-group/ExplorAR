@@ -1,8 +1,9 @@
-import React, { Component } from "react";
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
-import { ViroARSceneNavigator } from "react-viro";
+import React, { Component } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { ViroARSceneNavigator } from 'react-viro';
+import FabExample from './FAB';
 
-const InitialARScene = require("./PointOfInterest");
+const InitialARScene = require('./PointOfInterest');
 
 export default class AR extends Component {
   constructor(props) {
@@ -19,11 +20,11 @@ export default class AR extends Component {
         />
         <View
           style={{
-            position: "absolute",
+            position: 'absolute',
             left: 0,
             right: 0,
             bottom: 10,
-            alignItems: "center"
+            alignItems: 'center'
           }}
         >
           <TouchableOpacity
@@ -35,6 +36,74 @@ export default class AR extends Component {
             <Text style={styles.exitButtonText}>Exit AR</Text>
           </TouchableOpacity>
         </View>
+        <View
+          style={{
+            position: 'absolute',
+            left: 10,
+            right: 0,
+            top: 10,
+            alignItems: 'flex-start',
+            justifyContent: 'space-between'
+          }}
+        >
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              this.props.goToLogin();
+            }}
+          >
+            <Image
+              style={styles.image}
+              source={require('../res/icons/restaurant.png')}
+            />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 40,
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            margin: 10
+          }}
+        >
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              this.props.goToLogin();
+            }}
+          >
+            <Image
+              style={styles.image}
+              source={require('../res/icons/restaurant.png')}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              this.props.goToLogin();
+            }}
+          >
+            <Image
+              style={styles.image}
+              source={require('../res/icons/champagne-glass.png')}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              this.props.goToLogin();
+            }}
+          >
+            <Image
+              style={styles.image}
+              source={require('../res/icons/statue-of-liberty.png')}
+            />
+          </TouchableOpacity>
+        </View>
+        <FabExample />
       </View>
     );
   }
@@ -43,29 +112,40 @@ export default class AR extends Component {
 const styles = StyleSheet.create({
   outer: {
     flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "black"
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'black'
   },
   inner: {
     flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    backgroundColor: "black"
+    flexDirection: 'column',
+    alignItems: 'center',
+    backgroundColor: 'black'
   },
   titleText: {
     paddingTop: 30,
     paddingBottom: 20,
-    color: "#fff",
-    textAlign: "center",
+    color: '#fff',
+    textAlign: 'center',
     fontSize: 25
   },
   exitButton: {
-    alignItems: "center",
-    backgroundColor: "#6e6e6e",
+    alignItems: 'center',
+    backgroundColor: '#6e6e6e',
     padding: 10
   },
   exitButtonText: {
-    color: "#ffffff"
+    color: '#ffffff'
+  },
+  button: {
+    alignItems: 'center',
+    padding: 20,
+    marginEnd: 10,
+    justifyContent: 'space-between'
+  },
+  image: {
+    width: 30,
+    height: 30,
+    tintColor: 'white'
   }
 });
