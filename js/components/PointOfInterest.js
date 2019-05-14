@@ -6,7 +6,8 @@ import {
   ViroText,
   ViroImage,
   Viro3DObject,
-  ViroAmbientLight
+  ViroAmbientLight,
+  ViroFlexView
 } from "react-viro";
 import axios from "axios";
 import { LOCALIP } from "../../constants";
@@ -217,7 +218,7 @@ export default class PointOfInterest extends Component {
               key={poi.id}
               text={String(poi.name)}
               extrusionDepth={8}
-              scale={[3, 3, 3]}
+              scale={[2, 2, 2]}
               position={(() => {
                 let point = this._transformPointToAR(
                   poi.latitude,
@@ -229,39 +230,78 @@ export default class PointOfInterest extends Component {
             />
           );
         })}
+        {/* FAR POI MARKERS */}
         {this.state.farPOIs.map(poi => {
           return (
             <ViroImage
               transformBehaviors={["billboard"]}
               key={poi.id}
               source={require("../res/distantPOImarker.png")}
-              scale={[3, 3, 3]}
+              scale={[1, 1, 1]}
               position={(() => {
                 let point = this._transformPointToAR(
                   poi.latitude,
                   poi.longitude
                 );
-                return [point.x * 0.05, 3, point.z * 0.05];
+                return [point.x * 0.05, 1.5, point.z * 0.05];
               })()}
             />
           );
         })}
-        {/* {this.state.farPOIs.map(poi => {
-          return (
+        <ViroFlexView
+          height={2.5}
+          width={5}
+          position={[0, 0, -10]}
+          transformBehaviors={["billboard"]}
+          backgroundColor={"red"}
+        >
+          <ViroFlexView
+            backgroundColor={"green"}
+            style={{ flex: 0.2, flexDirection: "row" }}
+          >
+            <ViroFlexView backgroundColor={"white"} style={{ flex: 0.1 }}>
+              <ViroImage
+                style={{ flex: 1 }}
+                source={require("../res/times-circle.png")}
+              />
+            </ViroFlexView>
+            <ViroFlexView
+              backgroundColor={"yellow"}
+              style={{ flex: 0.9, flexDirection: "row" }}
+            />
+          </ViroFlexView>
+          <ViroFlexView
+            backgroundColor={"grey"}
+            style={{ flex: 0.8, flexDirection: "row" }}
+          >
             <ViroText
+              style={{ color: "#ff0000", flex: 1 }}
+              text={"Hello"}
+              fontSize={30}
+            />
+          </ViroFlexView>
+        </ViroFlexView>
+
+        {/* {this.state.POIs.map(poi => {
+          //do growing animation
+          return (
+            <ViroImage
               transformBehaviors={["billboard"]}
               key={poi.id}
-              text="!"
-              extrusionDepth={8}
-              scale={[15, 15, 15]}
+              // opacity={}
+              source={{
+                uri:
+                  "https://img.freepik.com/free-vector/vibrant-lines-black-background-vector_53876-86309.jpg?size=338&ext=jpg"
+              }}
+              scale={[2, 2, 2]}
               position={(() => {
                 let point = this._transformPointToAR(
                   poi.latitude,
                   poi.longitude
                 );
-                return 
+                let adjPoint = point.z * 0.05;
+                return [point.x * 0.05, 1.5, adjPoint - 1.5];
               })()}
-              style={styles[poi.category]}
             />
           );
         })} */}
