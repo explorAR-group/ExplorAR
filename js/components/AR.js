@@ -6,6 +6,12 @@ const InitialARScene = require('./PointOfInterest');
 export default class AR extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      Attractions: true,
+      Restaurants: false,
+      Bars: false
+    };
   }
   render() {
     return (
@@ -19,7 +25,7 @@ export default class AR extends Component {
           style={{
             position: 'absolute',
             left: 0,
-            right: 1,
+            right: 0,
             top: 1,
             alignItems: 'center',
             flexDirection: 'row-reverse'
