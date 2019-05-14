@@ -1,15 +1,16 @@
-"use strict";
-import React, { Component } from "react";
-import { StyleSheet, View } from "react-native";
+'use strict';
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
 import {
   ViroARScene,
   ViroText,
   ViroImage,
   Viro3DObject,
-  ViroAmbientLight
-} from "react-viro";
-import axios from "axios";
-import { LOCALIP } from "../../constants";
+  ViroAmbientLight,
+  ViroFlexView
+} from 'react-viro';
+import axios from 'axios';
+import { API_URL } from '../../constants';
 var currentLat;
 var currentLong;
 
@@ -19,7 +20,7 @@ export default class PointOfInterest extends Component {
 
     // Set initial state here
     this.state = {
-      text: "Initializing AR...",
+      text: 'Initializing AR...',
       POIs: [],
       latitude: 40.7049444,
       longitude: -74.0091771,
@@ -38,10 +39,10 @@ export default class PointOfInterest extends Component {
 
     async function success(position) {
       currentLat = position.coords.latitude;
-      console.warn(position.coords.latitude, "pos coords lat");
+      console.warn(position.coords.latitude, 'pos coords lat');
       currentLong = position.coords.longitude; // I can't seem to get the Coordinate info out of this function??
-      console.warn(currentLat, "current lat");
-      console.warn(this, "this"); // this is undefined here?? maybe there is a better place to set this state??
+      console.warn(currentLat, 'current lat');
+      console.warn(this, 'this'); // this is undefined here?? maybe there is a better place to set this state??
       await this.setState({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude
@@ -65,15 +66,15 @@ export default class PointOfInterest extends Component {
       console.warn(err);
     }
 
-    console.warn(currentLat, "current lat END");
-    console.warn(this.state.latitude, "this.state.lat END");
+    console.warn(currentLat, 'current lat END');
+    console.warn(this.state.latitude, 'this.state.lat END');
 
     // get POI and Restaurant info from backend
     try {
       let { data } = await axios.get(
-        `http://${LOCALIP}:8080/api/pointsOfInterest/?lat=${
-          this.state.latitude
-        }&long=${this.state.longitude}`
+        `${API_URL}/api/pointsOfInterest/?lat=${this.state.latitude}&long=${
+          this.state.longitude
+        }`
       );
 
       //add fullview
@@ -122,7 +123,7 @@ export default class PointOfInterest extends Component {
           return (
             <ViroText
               onClick={() => this.onClickName(poi.id)}
-              transformBehaviors={["billboard"]}
+              transformBehaviors={['billboard']}
               key={poi.id}
               text={String(poi.name)}
               extrusionDepth={8}
@@ -143,7 +144,7 @@ export default class PointOfInterest extends Component {
           if (poi.fullView) {
             return (
               <ViroText
-                transformBehaviors={["billboard"]}
+                transformBehaviors={['billboard']}
                 key={poi.id}
                 text={String(poi.description)}
                 extrusionDepth={2}
@@ -170,7 +171,7 @@ export default class PointOfInterest extends Component {
           if (poi.fullView) {
             return (
               <ViroImage
-                transformBehaviors={["billboard"]}
+                transformBehaviors={['billboard']}
                 key={poi.id}
                 source={{ uri: poi.imageUrl }}
                 scale={[5, 5, 5]}
@@ -188,7 +189,7 @@ export default class PointOfInterest extends Component {
         {this.state.farPOIs.map(poi => {
           return (
             <ViroText
-              transformBehaviors={["billboard"]}
+              transformBehaviors={['billboard']}
               key={poi.id}
               text={String(poi.name)}
               extrusionDepth={8}
@@ -207,7 +208,7 @@ export default class PointOfInterest extends Component {
         {this.state.farPOIs.map(poi => {
           return (
             <ViroText
-              transformBehaviors={["billboard"]}
+              transformBehaviors={['billboard']}
               key={poi.id}
               text="!"
               extrusionDepth={8}
@@ -258,34 +259,38 @@ export default class PointOfInterest extends Component {
 
 var styles = StyleSheet.create({
   Attractions: {
-    fontFamily: "Arial",
+    fontFamily: 'Arial',
     fontSize: 30,
-    color: "#dc143c",
-    textAlignVertical: "center",
-    textAlign: "center"
+    color: '#dc143c',
+    textAlignVertical: 'center',
+    textAlign: 'center'
   },
   Restaurants: {
-    fontFamily: "Arial",
+    fontFamily: 'Arial',
     fontSize: 30,
-    color: "#8fbc8f",
-    textAlignVertical: "center",
-    textAlign: "center"
+    color: '#8fbc8f',
+    textAlignVertical: 'center',
+    textAlign: 'center'
   },
   Bars: {
-    fontFamily: "Arial",
+    fontFamily: 'Arial',
     fontSize: 30,
-    color: "#1e90ff",
-    textAlignVertical: "center",
-    textAlign: "center"
+    color: '#1e90ff',
+    textAlignVertical: 'center',
+    textAlign: 'center'
   },
 
   descriptionTextStyle: {
-    fontFamily: "Arial",
+    fontFamily: 'Arial',
     fontSize: 15,
-    color: "#FFFFFF",
-    fontStyle: "italic",
-    textAlign: "center"
+    color: '#FFFFFF',
+    fontStyle: 'italic',
+    textAlign: 'center'
   }
+  // titleContainer: {
+  //   backgroundColor: '#ffffffdd',
+  //   padding: 0.2
+  // }
 });
 
 module.exports = PointOfInterest;
