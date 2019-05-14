@@ -13,13 +13,45 @@ export default class AR extends Component {
       Bars: false
     };
   }
+
+  // toggleCategory(category) {
+  //   if (category === 'Attractions') {
+  //     let temp = !this.state.Attractions;
+  //     this.setState({ Attractions: temp });
+  //   }
+  //   if (category === 'Restaurants') {
+  //     let temp = !this.state.Restaurants;
+  //     this.setState({ Restaurants: temp });
+  //   }
+  //   if (category === 'Bars') {
+  //     let temp = !this.state.Bars;
+  //     this.setState({ Bars: temp });
+  //   }
+  // console.warn('this.state AFTER toggle in AR comp', this.state);
+  // }
+  onClickRestaurants() {
+    let temp = !this.state.Restaurants;
+    this.setState({ Restaurants: temp });
+    console.warn('current State', this.state);
+  }
+  onClickBars() {
+    let temp = !this.state.Bars;
+    this.setState({ Bars: temp });
+  }
+  onClickAttractions() {
+    let temp = !this.state.Attractions;
+    this.setState({ Attractions: temp });
+  }
+
   render() {
+    console.warn(this.state, 'this.state in AR comp');
     return (
       <View style={styles.outer}>
         <ViroARSceneNavigator
           apiKey="C63BC372-68BB-4F10-B21A-7EC8E1ABFFC0"
           worldAlignment="GravityAndHeading"
           initialScene={{ scene: InitialARScene }}
+          viroAppProps={{ parentState: this.state }}
         />
         <View
           style={{
@@ -45,7 +77,7 @@ export default class AR extends Component {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              this.props.goToLogin();
+              this.onClickRestaurants();
             }}
           >
             <Image
@@ -56,7 +88,7 @@ export default class AR extends Component {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              this.props.goToLogin();
+              this.onClickBars();
             }}
           >
             <Image
@@ -67,7 +99,7 @@ export default class AR extends Component {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              this.props.goToLogin();
+              this.onClickAttractions();
             }}
           >
             <Image
