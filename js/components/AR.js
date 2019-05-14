@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { ViroARSceneNavigator } from 'react-viro';
+
 const InitialARScene = require('./PointOfInterest');
 export default class AR extends Component {
   constructor(props) {
@@ -18,31 +19,10 @@ export default class AR extends Component {
           style={{
             position: 'absolute',
             left: 0,
-            right: 20,
-            top: 20,
-            alignItems: 'flex-end'
-          }}
-        >
-          <TouchableOpacity
-            style={styles.exitButton}
-            onPress={() => {
-              this.props.goToLogin();
-            }}
-          >
-            <Image
-              source={require('../res/times-circle.png')}
-              style={{ width: 30, height: 30 }}
-            />
-          </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            position: 'absolute',
-            left: 10,
-            right: 0,
-            top: 10,
-            alignItems: 'flex-start',
-            justifyContent: 'space-between'
+            right: 1,
+            top: 1,
+            alignItems: 'center',
+            flexDirection: 'row-reverse'
           }}
         >
           <TouchableOpacity
@@ -52,22 +32,10 @@ export default class AR extends Component {
             }}
           >
             <Image
-              style={styles.image}
-              source={require('../res/icons/restaurant.png')}
+              source={require('../res/times-circle.png')}
+              style={{ width: 30, height: 30 }}
             />
           </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            top: 40,
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
-            margin: 10
-          }}
-        >
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
@@ -102,7 +70,6 @@ export default class AR extends Component {
             />
           </TouchableOpacity>
         </View>
-        <FabExample />
       </View>
     );
   }
@@ -116,7 +83,7 @@ const styles = StyleSheet.create({
   },
   inner: {
     flex: 1,
-    flexDirection: 'column',
+    flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'black'
   },
@@ -129,7 +96,6 @@ const styles = StyleSheet.create({
   },
   exitButton: {
     alignItems: 'center',
-    backgroundColor: '#6e6e6e',
     padding: 10
   },
   exitButtonText: {
