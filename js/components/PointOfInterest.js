@@ -9,6 +9,7 @@ import {
   ViroAmbientLight
 } from 'react-viro';
 import axios from 'axios';
+import { LOCALIP } from '../../constants';
 var currentLat;
 var currentLong;
 
@@ -70,7 +71,7 @@ export default class PointOfInterest extends Component {
     // get POI and Restaurant info from backend
     try {
       let { data } = await axios.get(
-        `http://172.16.23.29:8080/api/pointsOfInterest/?lat=${
+        `http://${LOCALIP}:8080/api/pointsOfInterest/?lat=${
           this.state.latitude
         }&long=${this.state.longitude}`
       );
