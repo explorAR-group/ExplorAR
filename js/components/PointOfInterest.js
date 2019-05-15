@@ -64,6 +64,39 @@ export class PointOfInterest extends Component {
               />
             );
           })}
+        {/* POI STARS */}
+        {selectedPois &&
+          selectedPois.map(poi => {
+            if (poi.fullView) {
+              let stars = "";
+              for (let i = 0; i < poi.yelpRating; i++) {
+                stars += "* ";
+              }
+
+              return (
+                <ViroText
+                  transformBehaviors={["billboard"]}
+                  key={poi.id}
+                  text={"" || stars}
+                  extrusionDepth={2}
+                  height={3}
+                  width={3}
+                  scale={[3, 3, 3]}
+                  textAlignVertical="top"
+                  textLineBreakMode="justify"
+                  textClipMode="clipToBounds"
+                  position={(() => {
+                    let point = this._transformPointToAR(
+                      poi.latitude,
+                      poi.longitude
+                    );
+                    return [point.x, -3, point.z];
+                  })()}
+                  style={styles.descriptionTextStyleStars}
+                />
+              );
+            }
+          })}
         {/* POI DESCRIPTION */}
         {selectedPois &&
           selectedPois.map(poi => {
@@ -295,6 +328,12 @@ var styles = StyleSheet.create({
     fontSize: 15,
     color: "#FFFFFF",
     fontStyle: "italic",
+    textAlign: "center"
+  },
+  descriptionTextStyleStars: {
+    fontFamily: "Arial",
+    fontSize: 25,
+    color: "#ffff00",
     textAlign: "center"
   }
   // titleContainer: {
