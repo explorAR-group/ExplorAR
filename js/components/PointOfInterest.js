@@ -1,8 +1,8 @@
-'use strict';
-import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { connect } from 'react-redux';
-import { getAllPoisThunk, toggleFullview } from '../store/poi.js';
+"use strict";
+import React, { Component } from "react";
+import { StyleSheet, View } from "react-native";
+import { connect } from "react-redux";
+import { getAllPoisThunk, toggleFullview } from "../store/poi.js";
 
 import {
   ViroARScene,
@@ -10,9 +10,9 @@ import {
   ViroImage,
   Viro3DObject,
   ViroAmbientLight
-} from 'react-viro';
-import axios from 'axios';
-import { LOCALIP } from '../../constants';
+} from "react-viro";
+import axios from "axios";
+import { LOCALIP } from "../../constants";
 
 var currentLat;
 var currentLong;
@@ -34,50 +34,7 @@ export class PointOfInterest extends Component {
   }
 
   async componentDidMount() {
-    // get location info for device - SETUP
-
-    // async function success(position) {
-    //   currentLat = position.coords.latitude;
-    //   currentLong = position.coords.longitude; // I can't seem to get the Coordinate info out of this function??
-    //   // this is undefined here??
-    //   await this.setState({
-    //     latitude: position.coords.latitude,
-    //     longitude: position.coords.longitude
-    //   });
-    // }
-
-    // function error(err) {
-    //   console.warn(`ERROR(${err.code}): ${err.message}`);
-    // }
-
-    // let options = {
-    //   enableHighAccuracy: true,
-    //   timeout: 2000,
-    //   maximumAge: 0
-    // };
-
-    // try {
-    //   // get location info for device - CALL
-    //   await navigator.geolocation.getCurrentPosition(success, error, options);
-    // } catch (err) {
-    //   console.warn(err);
-    // }
-
-    // get POI and Restaurant info from backend
     this.props.getAllPoisThunk(this.state.latitude, this.state.longitude);
-
-    //Creating new set of POIs based on far distance
-    // let tempArr = this.state.POIs.map(poi => {
-    //   let point = this._transformPointToAR(poi.latitude, poi.longitude);
-    //   poi.x = point.x;
-    //   poi.z = point.z;
-    //   return poi;
-    // });
-
-    // tempArr = tempArr.filter(
-    //   poi => Math.abs(poi.x) > 200 || Math.abs(poi.z) > 200
-    // );
-    // this.setState({ farPOIs: tempArr });
   }
 
   render() {
@@ -91,7 +48,7 @@ export class PointOfInterest extends Component {
             return (
               <ViroText
                 onClick={() => this.props.toggleFullview(poi.id)}
-                transformBehaviors={['billboard']}
+                transformBehaviors={["billboard"]}
                 key={poi.id}
                 text={String(poi.name)}
                 extrusionDepth={8}
@@ -113,7 +70,7 @@ export class PointOfInterest extends Component {
             if (poi.fullView) {
               return (
                 <ViroText
-                  transformBehaviors={['billboard']}
+                  transformBehaviors={["billboard"]}
                   key={poi.id}
                   text={String(poi.description)}
                   extrusionDepth={2}
@@ -141,7 +98,7 @@ export class PointOfInterest extends Component {
             if (poi.fullView) {
               return (
                 <ViroImage
-                  transformBehaviors={['billboard']}
+                  transformBehaviors={["billboard"]}
                   key={poi.id}
                   source={{ uri: poi.imageUrl }}
                   scale={[5, 5, 5]}
@@ -154,6 +111,100 @@ export class PointOfInterest extends Component {
                   })()}
                 />
               );
+            }
+          })}
+        {selectedPois &&
+          selectedPois.map(poi => {
+            {
+              /* BACKGROUND */
+            }
+            if (poi.fullView) {
+              return (
+                <ViroImage
+                  transformBehaviors={["billboard"]}
+                  onClick={() => this.props.toggleFullview(poi.id)}
+                  key={poi.id}
+                  source={require("../res/1pxgrey.png")}
+                  scale={[10, 15, 10]}
+                  opacity={0.9}
+                  position={(() => {
+                    let point = this._transformPointToAR(
+                      poi.latitude,
+                      poi.longitude
+                    );
+                    return [point.x * 1.05, 1.25, point.z * 1.05];
+                  })()}
+                />
+              );
+            }
+          })}
+        {selectedPois &&
+          selectedPois.map(poi => {
+            {
+              /* BACKGROUND */
+            }
+            if (!poi.fullView) {
+              let marker;
+
+              if (poi.category === "Bars") {
+                {
+                  /* MAP MARKER */
+                }
+                marker = (
+                  <ViroImage
+                    transformBehaviors={["billboard"]}
+                    key={poi.id}
+                    source={require("../res/BarsPOImarker.png")}
+                    scale={[3, 3, 3]}
+                    position={(() => {
+                      let point = this._transformPointToAR(
+                        poi.latitude,
+                        poi.longitude
+                      );
+                      return [point.x * 0.95, 6, point.z * 0.95];
+                    })()}
+                  />
+                );
+              } else if (poi.category === "Restaurants") {
+                {
+                  /* MAP MARKER */
+                }
+                marker = (
+                  <ViroImage
+                    transformBehaviors={["billboard"]}
+                    key={poi.id}
+                    source={require("../res/RestaurantsPOImarker.png")}
+                    scale={[3, 3, 3]}
+                    position={(() => {
+                      let point = this._transformPointToAR(
+                        poi.latitude,
+                        poi.longitude
+                      );
+                      return [point.x * 0.95, 6, point.z * 0.95];
+                    })()}
+                  />
+                );
+              } else if (poi.category === "Attractions") {
+                {
+                  /* MAP MARKER */
+                }
+                marker = (
+                  <ViroImage
+                    transformBehaviors={["billboard"]}
+                    key={poi.id}
+                    source={require("../res/AttractionsPOImarker.png")}
+                    scale={[3, 3, 3]}
+                    position={(() => {
+                      let point = this._transformPointToAR(
+                        poi.latitude,
+                        poi.longitude
+                      );
+                      return [point.x * 0.95, 6, point.z * 0.95];
+                    })()}
+                  />
+                );
+              }
+              return <>{marker}</>;
             }
           })}
       </ViroARScene>
@@ -218,33 +269,33 @@ export default connect(
 
 var styles = StyleSheet.create({
   Attractions: {
-    fontFamily: 'Arial',
+    fontFamily: "Arial",
     fontSize: 30,
-    color: '#dc143c',
-    textAlignVertical: 'center',
-    textAlign: 'center'
+    color: "#dc143c",
+    textAlignVertical: "center",
+    textAlign: "center"
   },
   Restaurants: {
-    fontFamily: 'Arial',
+    fontFamily: "Arial",
     fontSize: 30,
-    color: '#8fbc8f',
-    textAlignVertical: 'center',
-    textAlign: 'center'
+    color: "#8fbc8f",
+    textAlignVertical: "center",
+    textAlign: "center"
   },
   Bars: {
-    fontFamily: 'Arial',
+    fontFamily: "Arial",
     fontSize: 30,
-    color: '#1e90ff',
-    textAlignVertical: 'center',
-    textAlign: 'center'
+    color: "#1e90ff",
+    textAlignVertical: "center",
+    textAlign: "center"
   },
 
   descriptionTextStyle: {
-    fontFamily: 'Arial',
+    fontFamily: "Arial",
     fontSize: 15,
-    color: '#FFFFFF',
-    fontStyle: 'italic',
-    textAlign: 'center'
+    color: "#FFFFFF",
+    fontStyle: "italic",
+    textAlign: "center"
   }
   // titleContainer: {
   //   backgroundColor: '#ffffffdd',
