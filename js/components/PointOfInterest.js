@@ -72,7 +72,7 @@ export class PointOfInterest extends Component {
                 <ViroText
                   transformBehaviors={["billboard"]}
                   key={poi.id}
-                  text={String(poi.description)}
+                  text={String(poi.description || poi.address)}
                   extrusionDepth={2}
                   height={3}
                   width={3}
