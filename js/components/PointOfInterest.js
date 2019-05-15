@@ -214,7 +214,7 @@ export class PointOfInterest extends Component {
               return (
                 <>
                   {/* NAME */}
-                  <ViroText
+                  {/* <ViroText
                     onClick={() => this.props.toggleFullview(poi.id)}
                     transformBehaviors={["billboard"]}
                     key={poi.id}
@@ -229,7 +229,7 @@ export class PointOfInterest extends Component {
                       return [point.x, 2, point.z];
                     })()}
                     style={styles[poi.category]}
-                  />
+                  /> */}
                   {marker}
                 </>
               );
