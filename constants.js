@@ -1,1 +1,1 @@
-export const LOCALIP = "172.16.18.226";
+export const API_URL = "https://explorar-server.herokuapp.com";

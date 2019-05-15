@@ -1,10 +1,10 @@
-"use strict";
-import React, { Component } from "react";
-import { StyleSheet, View } from "react-native";
-import { ViroARScene, ViroText, ViroImage } from "react-viro";
-import axios from "axios";
-import { copyFileSync } from "fs";
-import { LOCALIP } from "../../constants";
+'use strict';
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { ViroARScene, ViroText, ViroImage } from 'react-viro';
+import axios from 'axios';
+import { copyFileSync } from 'fs';
+import { API_URL } from '../../constants';
 
 export default class PointOfInterest extends Component {
   constructor() {
@@ -12,7 +12,7 @@ export default class PointOfInterest extends Component {
 
     // Set initial state here
     this.state = {
-      text: "Initializing AR...",
+      text: 'Initializing AR...',
       error: null,
       POIs: [],
       latitude: 0,
@@ -21,71 +21,116 @@ export default class PointOfInterest extends Component {
     };
 
     // bind 'this' to functions
-    this._onInitialized = this._onInitialized.bind(this);
+    this._onUpdated = this._onUpdated.bind(this);
     this._latLongToMerc = this._latLongToMerc.bind(this);
     this._transformPointToAR = this._transformPointToAR.bind(this);
     this.onClickName = this.onClickName.bind(this);
   }
 
   async componentDidMount() {
-    // get location info for device
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null
-        });
-      },
-      error => this.setState({ error: error.message }),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
+    // get location info for device - SETUP
+    console.warn(this, 'this within component did mount');
 
     // get API info from backend for POIs
-    let { data } = await axios.get(
-      `http://${LOCALIP}:8080/api/pointsOfInterest`
-    );
+    let { data } = await axios.get(`${API_URL}/api/pointsOfInterest`);
     //add fullview
     data = data.map(poi => {
       poi.fullView = false;
       return poi;
     });
 
-    this.setState({ POIs: data });
+    //   await new Promise((resolve, reject) => {
+    //     let success = async position => {
+    //       currentLat = position.coords.latitude;
+    //       console.warn(this, 'this within success');
 
-    //Creating new set of POIs based on far distance
-    // this.state.POIs.filter(elem => elem.longitude > 300)
+    //       console.warn(position.coords.latitude, 'pos coords lat');
+    //       currentLong = position.coords.longitude;
+    //       console.warn(currentLat, 'current lat');
+    //       await this.setState({
+    //         latitude: position.coords.latitude,
+    //         longitude: position.coords.longitude
+    //       });
+    //       resolve();
+    //     };
 
-    let tempArr = this.state.POIs.map(poi => {
-      let point = this._transformPointToAR(poi.latitude, poi.longitude);
-      poi.x = point.x;
-      poi.z = point.z;
-      return poi;
-    });
+    //     function error(err) {
+    //       console.warn(`ERROR(${err.code}): ${err.message}`);
+    //       reject(err);
+    //     }
 
-    tempArr = tempArr.filter(
-      poi => Math.abs(poi.x) > 140 || Math.abs(poi.z) > 140
-    );
-    this.setState({ farPOIs: tempArr });
+    //     let options = {
+    //       enableHighAccuracy: true,
+    //       timeout: 2000,
+    //       maximumAge: 0
+    //     };
+
+    //     navigator.geolocation.getCurrentPosition(success, error, options);
+    //   });
+
+    //   console.warn('res banana', res);
+    // } catch (err) {
+    //   console.warn(err);
+    // }
+
+    console.warn(currentLat, 'current lat END');
+    console.warn(this.state.latitude, 'this.state.lat END');
+
+    // get POI and Restaurant info from backend
+    try {
+      let { data } = await axios.get(
+        `http://172.16.23.29:8080/api/pointsOfInterest/?lat=${
+          this.state.latitude
+        }&long=${this.state.longitude}`
+      );
+
+      //add fullview
+      data = data.map(poi => {
+        poi.fullView = false;
+        return poi;
+      });
+
+      this.setState({ POIs: data });
+
+      //Creating new set of POIs based on far distance
+      // this.state.POIs.filter(elem => elem.longitude > 300)
+
+      let tempArr = this.state.POIs.map(poi => {
+        let point = this._transformPointToAR(poi.latitude, poi.longitude);
+        poi.x = point.x;
+        poi.z = point.z;
+        return poi;
+      });
+
+      tempArr = tempArr.filter(
+        poi => Math.abs(poi.x) > 200 || Math.abs(poi.z) > 200
+      );
+      this.setState({ farPOIs: tempArr });
+    } catch (err) {
+      console.warn(err);
+    }
   }
 
   onClickName(id) {
     let copyPOI = this.state.POIs;
-    copyPOI[id].fullView = !copyPOI[id].fullView;
+    copyPOI.map(poi => {
+      if (poi.id === id) {
+        poi.fullView = !poi.fullView;
+      }
+      return poi;
+    });
     this.setState({ POIs: copyPOI });
   }
 
   render() {
-    // console.warn(this.state.POIs, 'this.state.POIs');
-
     return (
-      <ViroARScene onTrackingInitialized={this._onInitialized}>
+      <ViroARScene onTrackingUpdated={this._onUpdated}>
         {/* POI NAME */}
         {this.state.POIs.map(poi => {
           return (
             <ViroText
               onClick={this.onClickName(poi.id)}
-              transformBehaviors={["billboard"]}
+              transformBehaviors={['billboard']}
               key={poi.id}
               text={String(poi.name)}
               extrusionDepth={8}
@@ -97,7 +142,7 @@ export default class PointOfInterest extends Component {
                 );
                 return [point.x, 2, point.z];
               })()}
-              style={styles.helloWorldTextStyle}
+              style={styles[poi.category]}
             />
           );
         })}
@@ -106,7 +151,7 @@ export default class PointOfInterest extends Component {
           if (poi.fullView) {
             return (
               <ViroText
-                transformBehaviors={["billboard"]}
+                transformBehaviors={['billboard']}
                 key={poi.id}
                 text={String(poi.description)}
                 extrusionDepth={2}
@@ -133,7 +178,7 @@ export default class PointOfInterest extends Component {
           if (poi.fullView) {
             return (
               <ViroImage
-                transformBehaviors={["billboard"]}
+                transformBehaviors={['billboard']}
                 key={poi.id}
                 source={{ uri: poi.imageUrl }}
                 scale={[5, 5, 5]}
@@ -151,7 +196,7 @@ export default class PointOfInterest extends Component {
         {this.state.farPOIs.map(poi => {
           return (
             <ViroText
-              transformBehaviors={["billboard"]}
+              transformBehaviors={['billboard']}
               key={poi.id}
               text={String(poi.name)}
               extrusionDepth={8}
@@ -163,14 +208,14 @@ export default class PointOfInterest extends Component {
                 );
                 return [point.x * 0.05, 0, point.z * 0.05];
               })()}
-              style={styles.helloWorldTextStyle}
+              style={styles[poi.category]}
             />
           );
         })}
         {this.state.farPOIs.map(poi => {
           return (
             <ViroText
-              transformBehaviors={["billboard"]}
+              transformBehaviors={['billboard']}
               key={poi.id}
               text="!"
               extrusionDepth={8}
@@ -182,7 +227,7 @@ export default class PointOfInterest extends Component {
                 );
                 return [point.x * 0.05, 3, point.z * 0.05];
               })()}
-              style={styles.helloWorldTextStyle}
+              style={styles[poi.category]}
             />
           );
         })}
@@ -190,7 +235,7 @@ export default class PointOfInterest extends Component {
     );
   }
 
-  _onInitialized() {}
+  _onUpdated() {}
 
   _latLongToMerc(lat_deg, lon_deg) {
     var lon_rad = (lon_deg / 180.0) * Math.PI;
@@ -203,11 +248,13 @@ export default class PointOfInterest extends Component {
 
   _transformPointToAR(lat, long) {
     var objPoint = this._latLongToMerc(lat, long);
-    // var devicePoint = this._latLongToMerc(
-    //   this.state.latitude,
-    //   this.state.longitude
-    // );
-    var devicePoint = this._latLongToMerc(40.7049444, -74.0091771);
+    var devicePoint = this._latLongToMerc(
+      this.state.latitude,
+      this.state.longitude
+    );
+    // var devicePoint = this._latLongToMerc(40.7049444, -74.0091771);
+
+    //
     // latitude(north,south) maps to the z axis in AR
     // longitude(east, west) maps to the x axis in AR
     var objFinalPosZ = objPoint.y - devicePoint.y;
@@ -219,18 +266,26 @@ export default class PointOfInterest extends Component {
 
 var styles = StyleSheet.create({
   helloWorldTextStyle: {
-    fontFamily: "Arial",
+    fontFamily: 'Arial',
     fontSize: 30,
-    color: "#000000",
-    textAlignVertical: "center",
-    textAlign: "center"
+    color: '#000000',
+    textAlignVertical: 'center',
+    textAlign: 'center'
   },
+  Bars: {
+    fontFamily: 'Arial',
+    fontSize: 30,
+    color: '#1e90ff',
+    textAlignVertical: 'center',
+    textAlign: 'center'
+  },
+
   descriptionTextStyle: {
-    fontFamily: "Arial",
+    fontFamily: 'Arial',
     fontSize: 15,
-    color: "#FFFFFF",
-    fontStyle: "italic",
-    textAlign: "center"
+    color: '#FFFFFF',
+    fontStyle: 'italic',
+    textAlign: 'center'
   }
 });
 
