@@ -37,8 +37,8 @@ class Login extends Component {
         <View style={styles.loginLogo}>
           <Text style={styles.loginH1}>Expl</Text>
           <Image
-            source={require("../res/globe-americas-solid-blue.png")}
-            style={{ width: 30, height: 30 }}
+            source={require("../res/globe-americas-solid.png")}
+            style={{ width: 30, height: 30, tintColor: "#3232A0" }}
           />
           <Text style={styles.loginH1}>r</Text>
           <Text style={[styles.loginH1, { fontStyle: "italic" }]}>AR</Text>
