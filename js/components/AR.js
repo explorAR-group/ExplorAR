@@ -58,6 +58,16 @@ export class AR extends Component {
               >
                 Welcome {user.firstName}!
               </Text>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                  color: 'white'
+                }}
+              >
+                {' '}
+                Tap to interact
+              </Text>
             </TouchableOpacity>
           </View>
         )}
