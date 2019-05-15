@@ -34,7 +34,6 @@ export class PointOfInterest extends Component {
     this._onUpdated = this._onUpdated.bind(this);
     this._latLongToMerc = this._latLongToMerc.bind(this);
     this._transformPointToAR = this._transformPointToAR.bind(this);
-    this.onClickName = this.onClickName.bind(this);
   }
 
   async componentDidMount() {
@@ -69,8 +68,8 @@ export class PointOfInterest extends Component {
 
     // get POI and Restaurant info from backend
     this.props.getAllPoisThunk(this.state.latitude, this.state.longitude);
-    //Creating new set of POIs based on far distance
 
+    //Creating new set of POIs based on far distance
     let tempArr = this.state.POIs.map(poi => {
       let point = this._transformPointToAR(poi.latitude, poi.longitude);
       poi.x = point.x;
@@ -82,17 +81,6 @@ export class PointOfInterest extends Component {
       poi => Math.abs(poi.x) > 200 || Math.abs(poi.z) > 200
     );
     this.setState({ farPOIs: tempArr });
-  }
-
-  onClickName(id) {
-    let copyPOI = this.state.POIs;
-    copyPOI.map(poi => {
-      if (poi.id === id) {
-        poi.fullView = !poi.fullView;
-      }
-      return poi;
-    });
-    this.setState({ POIs: copyPOI });
   }
 
   render() {
@@ -237,6 +225,11 @@ export class PointOfInterest extends Component {
     var objFinalPosZ = objPoint.y - devicePoint.y;
     var objFinalPosX = objPoint.x - devicePoint.x;
     //flip the z, as negative z(is in front of us which is north, pos z is behind(south).
+    if (Math.abs(objFinalPosZ) > 200 || Math.abs(objFinalPosX) > 200) {
+      objFinalPosX = objFinalPosX * 0.1;
+      objFinalPosZ = objFinalPosZ * 0.1;
+    }
+
     return { x: objFinalPosX, z: -objFinalPosZ };
   }
 }

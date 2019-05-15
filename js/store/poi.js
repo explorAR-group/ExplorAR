@@ -73,13 +73,10 @@ export default function(state = initialState, action) {
     case TOGGLE_FULLVIEW:
       stateCopy.selectedPois = stateCopy.selectedPois.map(poi => {
         if (poi.id === action.id) {
-          console.warn('poi.id select', poi.id);
           poi.fullView = !poi.fullView;
-          console.warn('FULLview select status post', poi.fullView);
         }
         return poi;
       });
-      console.warn('after toggle');
       return stateCopy;
     default:
       return state;
