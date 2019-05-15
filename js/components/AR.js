@@ -8,9 +8,24 @@ const InitialARScene = require('./PointOfInterest');
 export class AR extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      name: true
+    };
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({ name: false });
+    }, 6000);
+  }
+
+  removeName() {
+    let temp = this.state.name;
+    temp = !temp;
+    this.setState({ name: temp });
+  }
   render() {
+    const { user } = this.props;
     return (
       <View style={styles.outer}>
         <ViroARSceneNavigator
@@ -18,6 +33,45 @@ export class AR extends Component {
           worldAlignment="GravityAndHeading"
           initialScene={{ scene: InitialARScene }}
         />
+        {this.state.name && (
+          <View
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 90,
+              top: 200,
+              alignItems: 'center',
+              flexDirection: 'row-reverse'
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                this.removeName();
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 30,
+                  fontWeight: 'bold',
+                  color: 'white'
+                }}
+              >
+                Welcome {user.firstName}!
+              </Text>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                  color: 'white'
+                }}
+              >
+                {' '}
+                Tap to interact
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
         <View
           style={{
             position: 'absolute',
@@ -101,28 +155,7 @@ const styles = StyleSheet.create({
   outer: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'black'
-  },
-  inner: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'black'
-  },
-  titleText: {
-    paddingTop: 30,
-    paddingBottom: 20,
-    color: '#fff',
-    textAlign: 'center',
-    fontSize: 25
-  },
-  exitButton: {
-    alignItems: 'center',
-    padding: 10
-  },
-  exitButtonText: {
-    color: '#ffffff'
+    alignItems: 'center'
   },
   button: {
     alignItems: 'center',
