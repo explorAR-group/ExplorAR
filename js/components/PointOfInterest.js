@@ -23,11 +23,8 @@ export class PointOfInterest extends Component {
 
     // Set initial state here
     this.state = {
-      text: 'Initializing AR...',
-      POIs: [],
       latitude: 40.7049444,
-      longitude: -74.0091771,
-      farPOIs: []
+      longitude: -74.0091771
     };
 
     // bind 'this' to functions
@@ -70,17 +67,17 @@ export class PointOfInterest extends Component {
     this.props.getAllPoisThunk(this.state.latitude, this.state.longitude);
 
     //Creating new set of POIs based on far distance
-    let tempArr = this.state.POIs.map(poi => {
-      let point = this._transformPointToAR(poi.latitude, poi.longitude);
-      poi.x = point.x;
-      poi.z = point.z;
-      return poi;
-    });
+    // let tempArr = this.state.POIs.map(poi => {
+    //   let point = this._transformPointToAR(poi.latitude, poi.longitude);
+    //   poi.x = point.x;
+    //   poi.z = point.z;
+    //   return poi;
+    // });
 
-    tempArr = tempArr.filter(
-      poi => Math.abs(poi.x) > 200 || Math.abs(poi.z) > 200
-    );
-    this.setState({ farPOIs: tempArr });
+    // tempArr = tempArr.filter(
+    //   poi => Math.abs(poi.x) > 200 || Math.abs(poi.z) > 200
+    // );
+    // this.setState({ farPOIs: tempArr });
   }
 
   render() {
@@ -159,44 +156,6 @@ export class PointOfInterest extends Component {
               );
             }
           })}
-        {this.state.farPOIs.map(poi => {
-          return (
-            <ViroText
-              transformBehaviors={['billboard']}
-              key={poi.id}
-              text={String(poi.name)}
-              extrusionDepth={8}
-              scale={[3, 3, 3]}
-              position={(() => {
-                let point = this._transformPointToAR(
-                  poi.latitude,
-                  poi.longitude
-                );
-                return [point.x * 0.05, 0, point.z * 0.05];
-              })()}
-              style={styles[poi.category]}
-            />
-          );
-        })}
-        {this.state.farPOIs.map(poi => {
-          return (
-            <ViroText
-              transformBehaviors={['billboard']}
-              key={poi.id}
-              text="!"
-              extrusionDepth={8}
-              scale={[15, 15, 15]}
-              position={(() => {
-                let point = this._transformPointToAR(
-                  poi.latitude,
-                  poi.longitude
-                );
-                return [point.x * 0.05, 3, point.z * 0.05];
-              })()}
-              style={styles[poi.category]}
-            />
-          );
-        })}
       </ViroARScene>
     );
   }
