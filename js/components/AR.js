@@ -1,57 +1,22 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { ViroARSceneNavigator } from 'react-viro';
+import { connect } from 'react-redux';
+import { setselectedPois } from '../store/poi';
 
 const InitialARScene = require('./PointOfInterest');
-export default class AR extends Component {
+export class AR extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      Attractions: true,
-      Restaurants: false,
-      Bars: false
-    };
-  }
-
-  // toggleCategory(category) {
-  //   if (category === 'Attractions') {
-  //     let temp = !this.state.Attractions;
-  //     this.setState({ Attractions: temp });
-  //   }
-  //   if (category === 'Restaurants') {
-  //     let temp = !this.state.Restaurants;
-  //     this.setState({ Restaurants: temp });
-  //   }
-  //   if (category === 'Bars') {
-  //     let temp = !this.state.Bars;
-  //     this.setState({ Bars: temp });
-  //   }
-  // console.warn('this.state AFTER toggle in AR comp', this.state);
-  // }
-  onClickRestaurants() {
-    let temp = !this.state.Restaurants;
-    this.setState({ Restaurants: temp });
-    console.warn('current State', this.state);
-  }
-  onClickBars() {
-    let temp = !this.state.Bars;
-    this.setState({ Bars: temp });
-  }
-  onClickAttractions() {
-    let temp = !this.state.Attractions;
-    this.setState({ Attractions: temp });
   }
 
   render() {
-    console.warn(this.state, 'this.state in AR comp');
     return (
       <View style={styles.outer}>
         <ViroARSceneNavigator
           apiKey="C63BC372-68BB-4F10-B21A-7EC8E1ABFFC0"
           worldAlignment="GravityAndHeading"
           initialScene={{ scene: InitialARScene }}
-          viroAppProps={{ parentState: this.state }}
         />
         <View
           style={{
@@ -77,7 +42,7 @@ export default class AR extends Component {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              this.onClickRestaurants();
+              this.props.setSelectedPois('Restaurants');
             }}
           >
             <Image
@@ -88,7 +53,7 @@ export default class AR extends Component {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              this.onClickBars();
+              this.props.setSelectedPois('Bars');
             }}
           >
             <Image
@@ -99,7 +64,7 @@ export default class AR extends Component {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              this.onClickAttractions();
+              this.props.setSelectedPois('Attractions');
             }}
           >
             <Image
@@ -112,6 +77,26 @@ export default class AR extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  user: state.user,
+  allPoi: state.poi.allPois,
+  selectedPoi: state.poi.selectedPois
+});
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setSelectedPois: function(category) {
+      dispatch(setselectedPois(category));
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AR);
+
 const styles = StyleSheet.create({
   outer: {
     flex: 1,

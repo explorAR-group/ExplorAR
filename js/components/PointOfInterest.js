@@ -1,6 +1,9 @@
 'use strict';
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { connect } from 'react-redux';
+import { getAllPoisThunk, toggleFullview } from '../store/poi.js';
+
 import {
   ViroARScene,
   ViroText,
@@ -10,10 +13,11 @@ import {
 } from 'react-viro';
 import axios from 'axios';
 import { LOCALIP } from '../../constants';
+
 var currentLat;
 var currentLong;
 
-export default class PointOfInterest extends Component {
+export class PointOfInterest extends Component {
   constructor() {
     super();
 
@@ -38,10 +42,8 @@ export default class PointOfInterest extends Component {
 
     async function success(position) {
       currentLat = position.coords.latitude;
-      console.warn(position.coords.latitude, 'pos coords lat');
       currentLong = position.coords.longitude; // I can't seem to get the Coordinate info out of this function??
-      console.warn(currentLat, 'current lat');
-      console.warn(this, 'this'); // this is undefined here?? maybe there is a better place to set this state??
+      // this is undefined here??
       await this.setState({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude
@@ -65,42 +67,21 @@ export default class PointOfInterest extends Component {
       console.warn(err);
     }
 
-    console.warn(currentLat, 'current lat END');
-    console.warn(this.state.latitude, 'this.state.lat END');
-
     // get POI and Restaurant info from backend
-    try {
-      let { data } = await axios.get(
-        `http://${LOCALIP}:8080/api/pointsOfInterest/?lat=${
-          this.state.latitude
-        }&long=${this.state.longitude}`
-      );
+    this.props.getAllPoisThunk(this.state.latitude, this.state.longitude);
+    //Creating new set of POIs based on far distance
 
-      //add fullview
-      data = data.map(poi => {
-        poi.fullView = false;
-        return poi;
-      });
+    let tempArr = this.state.POIs.map(poi => {
+      let point = this._transformPointToAR(poi.latitude, poi.longitude);
+      poi.x = point.x;
+      poi.z = point.z;
+      return poi;
+    });
 
-      this.setState({ POIs: data });
-
-      //Creating new set of POIs based on far distance
-      // this.state.POIs.filter(elem => elem.longitude > 300)
-
-      let tempArr = this.state.POIs.map(poi => {
-        let point = this._transformPointToAR(poi.latitude, poi.longitude);
-        poi.x = point.x;
-        poi.z = point.z;
-        return poi;
-      });
-
-      tempArr = tempArr.filter(
-        poi => Math.abs(poi.x) > 200 || Math.abs(poi.z) > 200
-      );
-      this.setState({ farPOIs: tempArr });
-    } catch (err) {
-      console.warn(err);
-    }
+    tempArr = tempArr.filter(
+      poi => Math.abs(poi.x) > 200 || Math.abs(poi.z) > 200
+    );
+    this.setState({ farPOIs: tempArr });
   }
 
   onClickName(id) {
@@ -115,76 +96,81 @@ export default class PointOfInterest extends Component {
   }
 
   render() {
+    let { selectedPois } = this.props;
+
     return (
       <ViroARScene onTrackingUpdated={this._onUpdated}>
         {/* POI NAME */}
-        {this.state.POIs.map(poi => {
-          return (
-            <ViroText
-              onClick={() => this.onClickName(poi.id)}
-              transformBehaviors={['billboard']}
-              key={poi.id}
-              text={String(poi.name)}
-              extrusionDepth={8}
-              scale={[3, 3, 3]}
-              position={(() => {
-                let point = this._transformPointToAR(
-                  poi.latitude,
-                  poi.longitude
-                );
-                return [point.x, 2, point.z];
-              })()}
-              style={styles[poi.category]}
-            />
-          );
-        })}
-        {/* POI DESCRIPTION */}
-        {this.state.POIs.map(poi => {
-          if (poi.fullView) {
+        {selectedPois &&
+          selectedPois.map(poi => {
             return (
               <ViroText
+                onClick={() => this.props.toggleFullview(poi.id)}
                 transformBehaviors={['billboard']}
                 key={poi.id}
-                text={String(poi.description)}
-                extrusionDepth={2}
-                height={3}
-                width={3}
+                text={String(poi.name)}
+                extrusionDepth={8}
                 scale={[3, 3, 3]}
-                textAlignVertical="top"
-                textLineBreakMode="justify"
-                textClipMode="clipToBounds"
                 position={(() => {
                   let point = this._transformPointToAR(
                     poi.latitude,
                     poi.longitude
                   );
-                  return [point.x, -4, point.z];
+                  return [point.x, 2, point.z];
                 })()}
-                style={styles.descriptionTextStyle}
+                style={styles[poi.category]}
               />
             );
-          }
-        })}
+          })}
+        {/* POI DESCRIPTION */}
+        {selectedPois &&
+          selectedPois.map(poi => {
+            if (poi.fullView) {
+              return (
+                <ViroText
+                  transformBehaviors={['billboard']}
+                  key={poi.id}
+                  text={String(poi.description)}
+                  extrusionDepth={2}
+                  height={3}
+                  width={3}
+                  scale={[3, 3, 3]}
+                  textAlignVertical="top"
+                  textLineBreakMode="justify"
+                  textClipMode="clipToBounds"
+                  position={(() => {
+                    let point = this._transformPointToAR(
+                      poi.latitude,
+                      poi.longitude
+                    );
+                    return [point.x, -4, point.z];
+                  })()}
+                  style={styles.descriptionTextStyle}
+                />
+              );
+            }
+          })}
         {/* POI IMAGE */}
-        {this.state.POIs.map(poi => {
-          if (poi.fullView) {
-            return (
-              <ViroImage
-                transformBehaviors={['billboard']}
-                key={poi.id}
-                source={{ uri: poi.imageUrl }}
-                scale={[5, 5, 5]}
-                position={(() => {
-                  let point = this._transformPointToAR(
-                    poi.latitude,
-                    poi.longitude
-                  );
-                  return [point.x, 7, point.z];
-                })()}
-              />
-            );
-          }
-        })}
+        {selectedPois &&
+          selectedPois.map(poi => {
+            if (poi.fullView) {
+              return (
+                <ViroImage
+                  transformBehaviors={['billboard']}
+                  key={poi.id}
+                  source={{ uri: poi.imageUrl }}
+                  scale={[5, 5, 5]}
+                  position={(() => {
+                    let point = this._transformPointToAR(
+                      poi.latitude,
+                      poi.longitude
+                    );
+                    return [point.x, 7, point.z];
+                  })()}
+                />
+              );
+            }
+          })}
         {this.state.farPOIs.map(poi => {
           return (
             <ViroText
@@ -240,13 +226,12 @@ export default class PointOfInterest extends Component {
 
   _transformPointToAR(lat, long) {
     var objPoint = this._latLongToMerc(lat, long);
-    var devicePoint = this._latLongToMerc(
-      this.state.latitude,
-      this.state.longitude
-    );
-    // var devicePoint = this._latLongToMerc(40.7049444, -74.0091771);
+    // var devicePoint = this._latLongToMerc(
+    //   this.state.latitude,
+    //   this.state.longitude
+    // );
+    var devicePoint = this._latLongToMerc(40.7049444, -74.0091771);
 
-    //
     // latitude(north,south) maps to the z axis in AR
     // longitude(east, west) maps to the x axis in AR
     var objFinalPosZ = objPoint.y - devicePoint.y;
@@ -255,6 +240,29 @@ export default class PointOfInterest extends Component {
     return { x: objFinalPosX, z: -objFinalPosZ };
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+    allPois: state.poi.allPois,
+    selectedPois: state.poi.selectedPois
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    getAllPoisThunk: function(lat, long) {
+      dispatch(getAllPoisThunk(lat, long));
+    },
+    toggleFullview: function(id) {
+      dispatch(toggleFullview(id));
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PointOfInterest);
 
 var styles = StyleSheet.create({
   Attractions: {
@@ -288,4 +296,7 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = PointOfInterest;
+module.exports = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PointOfInterest);
