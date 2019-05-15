@@ -43,8 +43,7 @@ export const getAllPoisThunk = (lat, long) => {
       let { data } = await axios.get(
         `http://${LOCALIP}:8080/api/pointsOfInterest/?lat=${lat}&long=${long}`
       );
-
-      //add fullview
+      //add fullview property for front end UI
       data = data.map(poi => {
         poi.fullView = false;
         return poi;
@@ -69,20 +68,18 @@ export default function(state = initialState, action) {
       return stateCopy;
     case SET_ALL_POIS:
       stateCopy.allPois = action.poiList;
+      stateCopy.selectedPois = action.poiList;
       return stateCopy;
     case TOGGLE_FULLVIEW:
-      stateCopy.allPois = stateCopy.allPois.map(poi => {
-        if (poi.id === action.id) {
-          poi.fullView = !poi.fullView;
-        }
-        return poi;
-      });
       stateCopy.selectedPois = stateCopy.selectedPois.map(poi => {
         if (poi.id === action.id) {
+          console.warn('poi.id select', poi.id);
           poi.fullView = !poi.fullView;
+          console.warn('FULLview select status post', poi.fullView);
         }
         return poi;
       });
+      console.warn('after toggle');
       return stateCopy;
     default:
       return state;
