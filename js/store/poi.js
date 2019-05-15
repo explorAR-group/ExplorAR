@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LOCALIP } from '../../constants';
+import { API_URL } from '../../constants';
 
 /**
  * ACTION TYPES
@@ -41,7 +41,7 @@ export const getAllPoisThunk = (lat, long) => {
   return async dispatch => {
     try {
       let { data } = await axios.get(
-        `http://${LOCALIP}:8080/api/pointsOfInterest/?lat=${lat}&long=${long}`
+        `${API_URL}/api/pointsOfInterest/?lat=${lat}&long=${long}`
       );
       //add fullview property for front end UI
       data = data.map(poi => {

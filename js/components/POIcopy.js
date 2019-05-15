@@ -1,16 +1,10 @@
 'use strict';
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import {
-  ViroARScene,
-  ViroText,
-  ViroImage,
-  Viro3DObject,
-  ViroAmbientLight
-} from 'react-viro';
+import { ViroARScene, ViroText, ViroImage } from 'react-viro';
 import axios from 'axios';
-var currentLat;
-var currentLong;
+import { copyFileSync } from 'fs';
+import { API_URL } from '../../constants';
 
 export default class PointOfInterest extends Component {
   constructor() {
@@ -19,6 +13,7 @@ export default class PointOfInterest extends Component {
     // Set initial state here
     this.state = {
       text: 'Initializing AR...',
+      error: null,
       POIs: [],
       latitude: 0,
       longitude: 0,
@@ -36,8 +31,13 @@ export default class PointOfInterest extends Component {
     // get location info for device - SETUP
     console.warn(this, 'this within component did mount');
 
-    // try {
-    //   // get location info for device - CALL
+    // get API info from backend for POIs
+    let { data } = await axios.get(`${API_URL}/api/pointsOfInterest`);
+    //add fullview
+    data = data.map(poi => {
+      poi.fullView = false;
+      return poi;
+    });
 
     //   await new Promise((resolve, reject) => {
     //     let success = async position => {
@@ -129,7 +129,7 @@ export default class PointOfInterest extends Component {
         {this.state.POIs.map(poi => {
           return (
             <ViroText
-              onClick={() => this.onClickName(poi.id)}
+              onClick={this.onClickName(poi.id)}
               transformBehaviors={['billboard']}
               key={poi.id}
               text={String(poi.name)}
@@ -265,17 +265,10 @@ export default class PointOfInterest extends Component {
 }
 
 var styles = StyleSheet.create({
-  Attractions: {
+  helloWorldTextStyle: {
     fontFamily: 'Arial',
     fontSize: 30,
-    color: '#dc143c',
-    textAlignVertical: 'center',
-    textAlign: 'center'
-  },
-  Restaurants: {
-    fontFamily: 'Arial',
-    fontSize: 30,
-    color: '#8fbc8f',
+    color: '#000000',
     textAlignVertical: 'center',
     textAlign: 'center'
   },

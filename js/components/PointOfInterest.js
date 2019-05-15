@@ -246,6 +246,10 @@ var styles = StyleSheet.create({
     fontStyle: 'italic',
     textAlign: 'center'
   }
+  // titleContainer: {
+  //   backgroundColor: '#ffffffdd',
+  //   padding: 0.2
+  // }
 });
 
 module.exports = connect(
