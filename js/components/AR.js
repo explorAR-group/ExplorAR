@@ -100,7 +100,7 @@ export class AR extends Component {
             }}
           >
             <Image
-              style={styles.image}
+              style={styles.restaurant}
               source={require('../res/icons/restaurant.png')}
             />
           </TouchableOpacity>
@@ -111,7 +111,7 @@ export class AR extends Component {
             }}
           >
             <Image
-              style={styles.image}
+              style={styles.bars}
               source={require('../res/icons/champagne-glass.png')}
             />
           </TouchableOpacity>
@@ -122,7 +122,7 @@ export class AR extends Component {
             }}
           >
             <Image
-              style={styles.image}
+              style={styles.attractions}
               source={require('../res/icons/statue-of-liberty.png')}
             />
           </TouchableOpacity>
@@ -167,5 +167,20 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     tintColor: 'white'
+  },
+  restaurant: {
+    width: 30,
+    height: 30,
+    tintColor: '#8fbc8f'
+  },
+  bars: {
+    width: 30,
+    height: 30,
+    tintColor: '#1e90ff'
+  },
+  attractions: {
+    width: 30,
+    height: 30,
+    tintColor: '#dc143c'
   }
 });
