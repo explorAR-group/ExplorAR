@@ -62,9 +62,21 @@ export default function(state = initialState, action) {
   let stateCopy = { ...state };
   switch (action.type) {
     case SET_SELECTED_POIS:
-      stateCopy.selectedPois = stateCopy.allPois.filter(
-        poi => poi.category === action.category
-      );
+      //is the category in the selected?
+      if (
+        stateCopy.selectedPois.some(poi => poi.category === action.category)
+      ) {
+        // if yes remove it
+        stateCopy.selectedPois = stateCopy.selectedPois.filter(
+          poi => poi.category !== action.category
+        );
+      } else {
+        // if no add it
+        let newCat = stateCopy.allPois.filter(
+          poi => poi.category === action.category
+        );
+        stateCopy.selectedPois = [...stateCopy.selectedPois, ...newCat];
+      }
       return stateCopy;
     case SET_ALL_POIS:
       stateCopy.allPois = action.poiList;
