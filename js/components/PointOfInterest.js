@@ -36,32 +36,32 @@ export class PointOfInterest extends Component {
   async componentDidMount() {
     // get location info for device - SETUP
 
-    async function success(position) {
-      currentLat = position.coords.latitude;
-      currentLong = position.coords.longitude; // I can't seem to get the Coordinate info out of this function??
-      // this is undefined here??
-      await this.setState({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
-      });
-    }
+    // async function success(position) {
+    //   currentLat = position.coords.latitude;
+    //   currentLong = position.coords.longitude; // I can't seem to get the Coordinate info out of this function??
+    //   // this is undefined here??
+    //   await this.setState({
+    //     latitude: position.coords.latitude,
+    //     longitude: position.coords.longitude
+    //   });
+    // }
 
-    function error(err) {
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-    }
+    // function error(err) {
+    //   console.warn(`ERROR(${err.code}): ${err.message}`);
+    // }
 
-    let options = {
-      enableHighAccuracy: true,
-      timeout: 2000,
-      maximumAge: 0
-    };
+    // let options = {
+    //   enableHighAccuracy: true,
+    //   timeout: 2000,
+    //   maximumAge: 0
+    // };
 
-    try {
-      // get location info for device - CALL
-      await navigator.geolocation.getCurrentPosition(success, error, options);
-    } catch (err) {
-      console.warn(err);
-    }
+    // try {
+    //   // get location info for device - CALL
+    //   await navigator.geolocation.getCurrentPosition(success, error, options);
+    // } catch (err) {
+    //   console.warn(err);
+    // }
 
     // get POI and Restaurant info from backend
     this.props.getAllPoisThunk(this.state.latitude, this.state.longitude);

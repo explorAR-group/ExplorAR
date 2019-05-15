@@ -4,6 +4,7 @@ import store from './js/store/index';
 import Login from './js/components/Login';
 import Splash from './js/components/Splash';
 import AR from './js/components/AR';
+console.disableYellowBox = true;
 
 const ar = 'ar';
 const login = 'login';
