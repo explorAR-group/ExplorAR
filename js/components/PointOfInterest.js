@@ -1,8 +1,8 @@
-"use strict";
-import React, { Component } from "react";
-import { StyleSheet, View } from "react-native";
-import { connect } from "react-redux";
-import { getAllPoisThunk, toggleFullview } from "../store/poi.js";
+'use strict';
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { connect } from 'react-redux';
+import { getAllPoisThunk, toggleFullview } from '../store/poi.js';
 
 import {
   ViroARScene,
@@ -10,9 +10,9 @@ import {
   ViroImage,
   Viro3DObject,
   ViroAmbientLight
-} from "react-viro";
-import axios from "axios";
-import { LOCALIP } from "../../constants";
+} from 'react-viro';
+import axios from 'axios';
+import { LOCALIP } from '../../constants';
 
 var currentLat;
 var currentLong;
@@ -48,7 +48,7 @@ export class PointOfInterest extends Component {
             return (
               <ViroText
                 onClick={() => this.props.toggleFullview(poi.id)}
-                transformBehaviors={["billboard"]}
+                transformBehaviors={['billboard']}
                 key={poi.id}
                 text={String(poi.name)}
                 extrusionDepth={8}
@@ -70,9 +70,9 @@ export class PointOfInterest extends Component {
             if (poi.fullView) {
               return (
                 <ViroText
-                  transformBehaviors={["billboard"]}
+                  transformBehaviors={['billboard']}
                   key={poi.id}
-                  text={String(poi.description)}
+                  text={String(poi.description || poi.address)}
                   extrusionDepth={2}
                   height={3}
                   width={3}
@@ -98,7 +98,7 @@ export class PointOfInterest extends Component {
             if (poi.fullView) {
               return (
                 <ViroImage
-                  transformBehaviors={["billboard"]}
+                  transformBehaviors={['billboard']}
                   key={poi.id}
                   source={{ uri: poi.imageUrl }}
                   scale={[5, 5, 5]}
@@ -121,10 +121,10 @@ export class PointOfInterest extends Component {
             if (poi.fullView) {
               return (
                 <ViroImage
-                  transformBehaviors={["billboard"]}
+                  transformBehaviors={['billboard']}
                   onClick={() => this.props.toggleFullview(poi.id)}
                   key={poi.id}
-                  source={require("../res/1pxgrey.png")}
+                  source={require('../res/1pxgrey.png')}
                   scale={[10, 15, 10]}
                   opacity={0.9}
                   position={(() => {
@@ -146,15 +146,15 @@ export class PointOfInterest extends Component {
             if (!poi.fullView) {
               let marker;
 
-              if (poi.category === "Bars") {
+              if (poi.category === 'Bars') {
                 {
                   /* MAP MARKER */
                 }
                 marker = (
                   <ViroImage
-                    transformBehaviors={["billboard"]}
+                    transformBehaviors={['billboard']}
                     key={poi.id}
-                    source={require("../res/BarsPOImarker.png")}
+                    source={require('../res/BarsPOImarker.png')}
                     scale={[3, 3, 3]}
                     position={(() => {
                       let point = this._transformPointToAR(
@@ -165,15 +165,15 @@ export class PointOfInterest extends Component {
                     })()}
                   />
                 );
-              } else if (poi.category === "Restaurants") {
+              } else if (poi.category === 'Restaurants') {
                 {
                   /* MAP MARKER */
                 }
                 marker = (
                   <ViroImage
-                    transformBehaviors={["billboard"]}
+                    transformBehaviors={['billboard']}
                     key={poi.id}
-                    source={require("../res/RestaurantsPOImarker.png")}
+                    source={require('../res/RestaurantsPOImarker.png')}
                     scale={[3, 3, 3]}
                     position={(() => {
                       let point = this._transformPointToAR(
@@ -184,15 +184,15 @@ export class PointOfInterest extends Component {
                     })()}
                   />
                 );
-              } else if (poi.category === "Attractions") {
+              } else if (poi.category === 'Attractions') {
                 {
                   /* MAP MARKER */
                 }
                 marker = (
                   <ViroImage
-                    transformBehaviors={["billboard"]}
+                    transformBehaviors={['billboard']}
                     key={poi.id}
-                    source={require("../res/AttractionsPOImarker.png")}
+                    source={require('../res/AttractionsPOImarker.png')}
                     scale={[3, 3, 3]}
                     position={(() => {
                       let point = this._transformPointToAR(
@@ -269,33 +269,33 @@ export default connect(
 
 var styles = StyleSheet.create({
   Attractions: {
-    fontFamily: "Arial",
+    fontFamily: 'Arial',
     fontSize: 30,
-    color: "#dc143c",
-    textAlignVertical: "center",
-    textAlign: "center"
+    color: '#dc143c',
+    textAlignVertical: 'center',
+    textAlign: 'center'
   },
   Restaurants: {
-    fontFamily: "Arial",
+    fontFamily: 'Arial',
     fontSize: 30,
-    color: "#8fbc8f",
-    textAlignVertical: "center",
-    textAlign: "center"
+    color: '#8fbc8f',
+    textAlignVertical: 'center',
+    textAlign: 'center'
   },
   Bars: {
-    fontFamily: "Arial",
+    fontFamily: 'Arial',
     fontSize: 30,
-    color: "#1e90ff",
-    textAlignVertical: "center",
-    textAlign: "center"
+    color: '#1e90ff',
+    textAlignVertical: 'center',
+    textAlign: 'center'
   },
 
   descriptionTextStyle: {
-    fontFamily: "Arial",
+    fontFamily: 'Arial',
     fontSize: 15,
-    color: "#FFFFFF",
-    fontStyle: "italic",
-    textAlign: "center"
+    color: '#FFFFFF',
+    fontStyle: 'italic',
+    textAlign: 'center'
   }
   // titleContainer: {
   //   backgroundColor: '#ffffffdd',
