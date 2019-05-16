@@ -9,7 +9,10 @@ export class AR extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: true
+      name: true,
+      Restaurants: true,
+      Bars: true,
+      Attractions: true
     };
   }
 
@@ -24,6 +27,13 @@ export class AR extends Component {
     temp = !temp;
     this.setState({ name: temp });
   }
+
+  toggleClass(category) {
+    let currentState = this.state[category];
+    currentState = !currentState;
+    this.setState({ [category]: currentState });
+  }
+
   render() {
     const { user } = this.props;
     return (
@@ -99,10 +109,15 @@ export class AR extends Component {
             style={styles.button}
             onPress={() => {
               this.props.setSelectedPois("Restaurants");
+              this.toggleClass("Restaurants");
             }}
           >
             <Image
-              style={styles.restaurant}
+              style={
+                this.state.Restaurants
+                  ? styles.restaurantsActive
+                  : styles.inactive
+              }
               source={require("../res/icons/restaurant.png")}
             />
           </TouchableOpacity>
@@ -110,10 +125,11 @@ export class AR extends Component {
             style={styles.button}
             onPress={() => {
               this.props.setSelectedPois("Bars");
+              this.toggleClass("Bars");
             }}
           >
             <Image
-              style={styles.bars}
+              style={this.state.Bars ? styles.barsActive : styles.inactive}
               source={require("../res/icons/champagne-glass.png")}
             />
           </TouchableOpacity>
@@ -121,10 +137,15 @@ export class AR extends Component {
             style={styles.button}
             onPress={() => {
               this.props.setSelectedPois("Attractions");
+              this.toggleClass("Attractions");
             }}
           >
             <Image
-              style={styles.attractions}
+              style={
+                this.state.Attractions
+                  ? styles.attractionsActive
+                  : styles.inactive
+              }
               source={require("../res/icons/statue-of-liberty.png")}
             />
           </TouchableOpacity>
@@ -170,17 +191,22 @@ const styles = StyleSheet.create({
     height: 30,
     tintColor: "white"
   },
-  restaurant: {
+  inactive: {
+    width: 30,
+    height: 30,
+    tintColor: "#ffffff"
+  },
+  restaurantsActive: {
     width: 30,
     height: 30,
     tintColor: "#8fbc8f"
   },
-  bars: {
+  barsActive: {
     width: 30,
     height: 30,
     tintColor: "#1e90ff"
   },
-  attractions: {
+  attractionsActive: {
     width: 30,
     height: 30,
     tintColor: "#dc143c"
