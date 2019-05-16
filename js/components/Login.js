@@ -31,7 +31,6 @@ class Login extends Component {
     });
   }
   render() {
-    // console.warn(this.state);
     return (
       <View style={styles.loginWrapper}>
         <View style={styles.loginLogo}>

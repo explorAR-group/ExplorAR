@@ -1,21 +1,10 @@
 "use strict";
 import React, { Component } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { connect } from "react-redux";
 import { getAllPoisThunk, toggleFullview } from "../store/poi.js";
 
-import {
-  ViroARScene,
-  ViroText,
-  ViroImage,
-  Viro3DObject,
-  ViroAmbientLight
-} from "react-viro";
-import axios from "axios";
-import { LOCALIP } from "../../constants";
-
-var currentLat;
-var currentLong;
+import { ViroARScene, ViroText, ViroImage } from "react-viro";
 
 export class PointOfInterest extends Component {
   constructor() {
@@ -185,6 +174,7 @@ export class PointOfInterest extends Component {
                 }
                 marker = (
                   <ViroImage
+                    onClick={() => this.props.toggleFullview(poi.id)}
                     transformBehaviors={["billboard"]}
                     key={poi.id}
                     source={require("../res/BarsPOImarker.png")}
@@ -204,6 +194,7 @@ export class PointOfInterest extends Component {
                 }
                 marker = (
                   <ViroImage
+                    onClick={() => this.props.toggleFullview(poi.id)}
                     transformBehaviors={["billboard"]}
                     key={poi.id}
                     source={require("../res/RestaurantsPOImarker.png")}
@@ -223,6 +214,7 @@ export class PointOfInterest extends Component {
                 }
                 marker = (
                   <ViroImage
+                    onClick={() => this.props.toggleFullview(poi.id)}
                     transformBehaviors={["billboard"]}
                     key={poi.id}
                     source={require("../res/AttractionsPOImarker.png")}
@@ -336,10 +328,6 @@ var styles = StyleSheet.create({
     color: "#ffff00",
     textAlign: "center"
   }
-  // titleContainer: {
-  //   backgroundColor: '#ffffffdd',
-  //   padding: 0.2
-  // }
 });
 
 module.exports = connect(

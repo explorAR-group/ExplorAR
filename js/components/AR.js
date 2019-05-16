@@ -48,10 +48,11 @@ export class AR extends Component {
             style={{
               position: "absolute",
               left: 0,
-              right: 90,
-              top: 200,
+              right: 0,
+              top: 0,
+              bottom: 0,
               alignItems: "center",
-              flexDirection: "row-reverse"
+              justifyContent: "center"
             }}
           >
             <TouchableOpacity
@@ -63,7 +64,8 @@ export class AR extends Component {
                 style={{
                   fontSize: 30,
                   fontWeight: "bold",
-                  color: "white"
+                  color: "white",
+                  textAlign: "center"
                 }}
               >
                 Welcome {user.firstName}!
@@ -72,11 +74,11 @@ export class AR extends Component {
                 style={{
                   fontSize: 16,
                   fontWeight: "bold",
-                  color: "white"
+                  color: "white",
+                  textAlign: "center"
                 }}
               >
-                {" "}
-                Tap to interact
+                Tap a point to interact
               </Text>
             </TouchableOpacity>
           </View>
