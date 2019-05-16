@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { ViroARSceneNavigator } from 'react-viro';
-import { connect } from 'react-redux';
-import { setselectedPois } from '../store/poi';
+import React, { Component } from "react";
+import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { ViroARSceneNavigator } from "react-viro";
+import { connect } from "react-redux";
+import { setselectedPois } from "../store/poi";
 
-const InitialARScene = require('./PointOfInterest');
+const InitialARScene = require("./PointOfInterest");
 export class AR extends Component {
   constructor(props) {
     super(props);
@@ -36,12 +36,13 @@ export class AR extends Component {
         {this.state.name && (
           <View
             style={{
-              position: 'absolute',
+              position: "absolute",
               left: 0,
-              right: 90,
-              top: 200,
-              alignItems: 'center',
-              flexDirection: 'row-reverse'
+              right: 0,
+              top: 0,
+              bottom: 0,
+              alignItems: "center",
+              justifyContent: "center"
             }}
           >
             <TouchableOpacity
@@ -52,8 +53,9 @@ export class AR extends Component {
               <Text
                 style={{
                   fontSize: 30,
-                  fontWeight: 'bold',
-                  color: 'white'
+                  fontWeight: "bold",
+                  color: "white",
+                  textAlign: "center"
                 }}
               >
                 Welcome {user.firstName}!
@@ -61,12 +63,12 @@ export class AR extends Component {
               <Text
                 style={{
                   fontSize: 16,
-                  fontWeight: 'bold',
-                  color: 'white'
+                  fontWeight: "bold",
+                  color: "white",
+                  textAlign: "center"
                 }}
               >
-                {' '}
-                Tap to interact
+                Tap a point to interact
               </Text>
             </TouchableOpacity>
           </View>
@@ -74,12 +76,12 @@ export class AR extends Component {
 
         <View
           style={{
-            position: 'absolute',
+            position: "absolute",
             left: 0,
             right: 0,
             top: 1,
-            alignItems: 'center',
-            flexDirection: 'row-reverse'
+            alignItems: "center",
+            flexDirection: "row-reverse"
           }}
         >
           <TouchableOpacity
@@ -89,41 +91,41 @@ export class AR extends Component {
             }}
           >
             <Image
-              source={require('../res/times-circle.png')}
+              source={require("../res/times-circle.png")}
               style={{ width: 30, height: 30 }}
             />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              this.props.setSelectedPois('Restaurants');
+              this.props.setSelectedPois("Restaurants");
             }}
           >
             <Image
               style={styles.restaurant}
-              source={require('../res/icons/restaurant.png')}
+              source={require("../res/icons/restaurant.png")}
             />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              this.props.setSelectedPois('Bars');
+              this.props.setSelectedPois("Bars");
             }}
           >
             <Image
               style={styles.bars}
-              source={require('../res/icons/champagne-glass.png')}
+              source={require("../res/icons/champagne-glass.png")}
             />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              this.props.setSelectedPois('Attractions');
+              this.props.setSelectedPois("Attractions");
             }}
           >
             <Image
               style={styles.attractions}
-              source={require('../res/icons/statue-of-liberty.png')}
+              source={require("../res/icons/statue-of-liberty.png")}
             />
           </TouchableOpacity>
         </View>
@@ -154,33 +156,33 @@ export default connect(
 const styles = StyleSheet.create({
   outer: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center'
+    flexDirection: "row",
+    alignItems: "center"
   },
   button: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 20,
     marginEnd: 10,
-    justifyContent: 'space-between'
+    justifyContent: "space-between"
   },
   image: {
     width: 30,
     height: 30,
-    tintColor: 'white'
+    tintColor: "white"
   },
   restaurant: {
     width: 30,
     height: 30,
-    tintColor: '#8fbc8f'
+    tintColor: "#8fbc8f"
   },
   bars: {
     width: 30,
     height: 30,
-    tintColor: '#1e90ff'
+    tintColor: "#1e90ff"
   },
   attractions: {
     width: 30,
     height: 30,
-    tintColor: '#dc143c'
+    tintColor: "#dc143c"
   }
 });
