@@ -1,15 +1,18 @@
-import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { ViroARSceneNavigator } from 'react-viro';
-import { connect } from 'react-redux';
-import { setselectedPois } from '../store/poi';
+import React, { Component } from "react";
+import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { ViroARSceneNavigator } from "react-viro";
+import { connect } from "react-redux";
+import { setselectedPois } from "../store/poi";
 
-const InitialARScene = require('./PointOfInterest');
+const InitialARScene = require("./PointOfInterest");
 export class AR extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: true
+      name: true,
+      Restaurants: true,
+      Bars: true,
+      Attractions: true
     };
   }
 
@@ -24,6 +27,13 @@ export class AR extends Component {
     temp = !temp;
     this.setState({ name: temp });
   }
+
+  toggleClass(category) {
+    let currentState = this.state[category];
+    currentState = !currentState;
+    this.setState({ [category]: currentState });
+  }
+
   render() {
     const { user } = this.props;
     return (
@@ -36,12 +46,12 @@ export class AR extends Component {
         {this.state.name && (
           <View
             style={{
-              position: 'absolute',
+              position: "absolute",
               left: 0,
               right: 90,
               top: 200,
-              alignItems: 'center',
-              flexDirection: 'row-reverse'
+              alignItems: "center",
+              flexDirection: "row-reverse"
             }}
           >
             <TouchableOpacity
@@ -52,8 +62,8 @@ export class AR extends Component {
               <Text
                 style={{
                   fontSize: 30,
-                  fontWeight: 'bold',
-                  color: 'white'
+                  fontWeight: "bold",
+                  color: "white"
                 }}
               >
                 Welcome {user.firstName}!
@@ -61,11 +71,11 @@ export class AR extends Component {
               <Text
                 style={{
                   fontSize: 16,
-                  fontWeight: 'bold',
-                  color: 'white'
+                  fontWeight: "bold",
+                  color: "white"
                 }}
               >
-                {' '}
+                {" "}
                 Tap to interact
               </Text>
             </TouchableOpacity>
@@ -74,12 +84,12 @@ export class AR extends Component {
 
         <View
           style={{
-            position: 'absolute',
+            position: "absolute",
             left: 0,
             right: 0,
             top: 1,
-            alignItems: 'center',
-            flexDirection: 'row-reverse'
+            alignItems: "center",
+            flexDirection: "row-reverse"
           }}
         >
           <TouchableOpacity
@@ -89,41 +99,52 @@ export class AR extends Component {
             }}
           >
             <Image
-              source={require('../res/times-circle.png')}
+              source={require("../res/times-circle.png")}
               style={{ width: 30, height: 30 }}
             />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              this.props.setSelectedPois('Restaurants');
+              this.props.setSelectedPois("Restaurants");
+              this.toggleClass("Restaurants");
             }}
           >
             <Image
-              style={styles.restaurant}
-              source={require('../res/icons/restaurant.png')}
+              style={
+                this.state.Restaurants
+                  ? styles.restaurantsActive
+                  : styles.inactive
+              }
+              source={require("../res/icons/restaurant.png")}
             />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              this.props.setSelectedPois('Bars');
+              this.props.setSelectedPois("Bars");
+              this.toggleClass("Bars");
             }}
           >
             <Image
-              style={styles.bars}
-              source={require('../res/icons/champagne-glass.png')}
+              style={this.state.Bars ? styles.barsActive : styles.inactive}
+              source={require("../res/icons/champagne-glass.png")}
             />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              this.props.setSelectedPois('Attractions');
+              this.props.setSelectedPois("Attractions");
+              this.toggleClass("Attractions");
             }}
           >
             <Image
-              style={styles.attractions}
-              source={require('../res/icons/statue-of-liberty.png')}
+              style={
+                this.state.Attractions
+                  ? styles.attractionsActive
+                  : styles.inactive
+              }
+              source={require("../res/icons/statue-of-liberty.png")}
             />
           </TouchableOpacity>
         </View>
@@ -154,33 +175,38 @@ export default connect(
 const styles = StyleSheet.create({
   outer: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center'
+    flexDirection: "row",
+    alignItems: "center"
   },
   button: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 20,
     marginEnd: 10,
-    justifyContent: 'space-between'
+    justifyContent: "space-between"
   },
   image: {
     width: 30,
     height: 30,
-    tintColor: 'white'
+    tintColor: "white"
   },
-  restaurant: {
+  inactive: {
     width: 30,
     height: 30,
-    tintColor: '#8fbc8f'
+    tintColor: "#ffffff"
   },
-  bars: {
+  restaurantsActive: {
     width: 30,
     height: 30,
-    tintColor: '#1e90ff'
+    tintColor: "#8fbc8f"
   },
-  attractions: {
+  barsActive: {
     width: 30,
     height: 30,
-    tintColor: '#dc143c'
+    tintColor: "#1e90ff"
+  },
+  attractionsActive: {
+    width: 30,
+    height: 30,
+    tintColor: "#dc143c"
   }
 });
